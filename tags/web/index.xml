@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Web on 4 Fish</title>
+    <link>http://4fish.xyz/tags/web/</link>
+    <description>Recent content in Web on 4 Fish</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Wed, 25 Apr 2018 21:00:09 +0800</lastBuildDate>
+    
+	<atom:link href="http://4fish.xyz/tags/web/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>DDIA笔记</title>
+      <link>http://4fish.xyz/posts/ddia-note/</link>
+      <pubDate>Wed, 25 Apr 2018 21:00:09 +0800</pubDate>
+      
+      <guid>http://4fish.xyz/posts/ddia-note/</guid>
+      <description>第一章：可靠性，可扩展性，可维护性 许多应用程序都需要：数据库，缓存，搜索索引，流处理，批处理。 三个软件系统中的重要问题：可靠性（在困境中仍能</description>
+    </item>
+    
+    <item>
+      <title>Python服务器编程</title>
+      <link>http://4fish.xyz/posts/python-server/</link>
+      <pubDate>Sat, 14 Oct 2017 00:00:00 +0800</pubDate>
+      
+      <guid>http://4fish.xyz/posts/python-server/</guid>
+      <description>IEEE公布的2017年编程语言排行榜，python高居首位。在百度指数上，python的搜索量也跻身到与java相等的量级，成为最火的语言</description>
+    </item>
+    
+    <item>
+      <title>网络笔记</title>
+      <link>http://4fish.xyz/posts/network-note/</link>
+      <pubDate>Wed, 15 Mar 2017 00:00:00 +0800</pubDate>
+      
+      <guid>http://4fish.xyz/posts/network-note/</guid>
+      <description>socket是一种ipc方法（介于传输层和应用层的一组api），允许同一主机或网络连接的主机上的应用程序交换数据。 现代操作系统支持下列soc</description>
+    </item>
+    
+    <item>
+      <title>Django实践笔记</title>
+      <link>http://4fish.xyz/posts/django-note/</link>
+      <pubDate>Tue, 28 Feb 2017 00:00:05 +0800</pubDate>
+      
+      <guid>http://4fish.xyz/posts/django-note/</guid>
+      <description>本文以Python的Web框架Django为例，整理下做从零开始到一个成型的网站所涉及到内容，目的不是教你如何一步一步搭建项目，而是让你对D</description>
+    </item>
+    
+    <item>
+      <title>从0到1，Python网络编程的入门之路</title>
+      <link>http://4fish.xyz/posts/python-network/</link>
+      <pubDate>Tue, 28 Feb 2017 00:00:02 +0800</pubDate>
+      
+      <guid>http://4fish.xyz/posts/python-network/</guid>
+      <description>最近在学习Python网络编程时看了一些相关的文章，发现大多数要么讲的晦涩难懂，要么讲的比较浅显，我就想为什么不在学习的过程中写一篇心得呢，</description>
+    </item>
+    
+    <item>
+      <title>从0到1，Python异步编程的演进之路</title>
+      <link>http://4fish.xyz/posts/python-async/</link>
+      <pubDate>Tue, 28 Feb 2017 00:00:01 +0800</pubDate>
+      
+      <guid>http://4fish.xyz/posts/python-async/</guid>
+      <description>本文将通过一些例子来讲述作为Python开发者有哪些常用的方式来实现异步编程，以及分享个人对异步编程的理解，如有错误，欢迎指正。 先从一个例子</description>
+    </item>
+    
+    <item>
+      <title>从0到1，Python Web开发的进击之路</title>
+      <link>http://4fish.xyz/posts/python-web/</link>
+      <pubDate>Tue, 28 Feb 2017 00:00:00 +0800</pubDate>
+      
+      <guid>http://4fish.xyz/posts/python-web/</guid>
+      <description>本文将以个人（开发）的角度，讲述如何从零开始，编写、搭建和部署一个基于Python的Web应用程序。 从最简单的出发点来剖析，一个web应用后</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		
+		
+		<meta name="generator" content="Hugo 0.26" />
+		<title>JS中的闭包概念 &middot; 4 Fish</title>
+		<link rel="shortcut icon" href="http://4fish.xyz/images/favicon.ico">
+		<link rel="stylesheet" href="http://4fish.xyz/css/style.css">
+		<link rel="stylesheet" href="http://4fish.xyz/css/highlight.css">
+
+		
+		<link rel="stylesheet" href="http://4fish.xyz/css/monosocialiconsfont.css">
+		
+
+		
+		<link href="http://4fish.xyz/index.xml" rel="alternate" type="application/rss+xml" title="4 Fish" />
+		
+
+		
+	</head>
+
+    <body>
+       <nav class="main-nav">
+	
+	
+		<a href='http://4fish.xyz/'> <span class="arrow">←</span>Home</a>
+	
+	<a href='http://4fish.xyz/posts'>Archive</a>
+	<a href='http://4fish.xyz/tags'>Tags</a>
+	<a href='http://4fish.xyz/about'>About</a>
+
+	
+
+	
+	<a class="cta" href="http://4fish.xyz/index.xml">Subscribe</a>
+	
+</nav>
+
+
+        <section id="wrapper" class="post">
+            <article>
+                <header>
+                    <h1>
+                        JS中的闭包概念
+                    </h1>
+                    <h2 class="headline">
+                    Mar 14, 2017 00:00
+                    · 552 words
+                    · 2 minute read
+                      <span class="tags">
+                      
+                      
+                          
+                              <a href="http://4fish.xyz/tags/javascript">javascript</a>
+                          
+                      
+                      
+                      </span>
+                    </h2>
+                </header>
+                
+                <section id="post-body">
+                    <p>像其他大多数动态编程语言一样，js也采用词法作用域，换而言之，函数的执行依赖于变量作用域，这个作用域是在函数定义时决定的，而不是函数调用时决定的。</p>
+
+<p>var scope = &ldquo;global scope&rdquo;;
+function checkscope() {
+    var scope = &ldquo;local scope&rdquo;;
+    function f() { return scope; }
+    return f;
+}</p>
+
+<p>var local_func = checkscope()
+local_func()    //  = &ldquo;local scope&rdquo;
+观察上面这段代码，首先在外层定义了一个名为scope的全局变量，接着定义了一个函数checkscope()，在函数中也定义了一个名为scope的局部变量以及一个返回该变量的嵌套函数f()，最后在外层函数的最后一行把该嵌套函数返回。代码的最后把嵌套函数拿到再调用，输出local scope。</p>
+
+<p>下面来窥探一下代码的原理，我们都知道在C语言这种底层编程语言中，函数中的非静态变量是储存在CPU栈中的，当函数调用结束后堆栈中的空间也由编译器自动释放。在JS中，有一个叫作用域链的对象，简单的说，它就是一个对象列表，而不是一个绑定的栈，函数调用的时候会创建一个新的对象保存局部变量，随之把该对象添加到作用域链中的对象列表中，当函数返回时，便把该对象删除，也即是说，当该保存变量的对象的引用数为0时，它就会被垃圾回收器清除掉，然而，在闭包中，外层函数返回的嵌套函数依然保留着作用域链中对象的外部引用，因此，该对象并不会被垃圾回收删除，而返回的嵌套函数此时便能通过作用域链访问和修改到外部变量了，这就是闭包的大概思想。</p>
+
+<p><img src="https://s1.ax2x.com/2018/04/28/8klnY.png" alt="" /></p>
+
+                </section>
+            </article>
+
+            
+
+            
+
+            
+
+            <footer id="footer">
+    
+    <p class="small">
+    
+       © Copyright 2018 <i class="fa fa-heart" aria-hidden="true"></i> 
+    
+    </p>
+    <p class="small">
+        Powered by <a href="http://www.gohugo.io/">Hugo</a> Theme By <a href="https://github.com/nodejh/hugo-theme-cactus-plus">nodejh</a>
+    </p>
+</footer>
+
+        </section>
+
+        <script src="http://4fish.xyz/js/jquery-3.3.1.min.js"></script>
+<script src="http://4fish.xyz/js/main.js"></script>
+<script src="http://4fish.xyz/js/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+  
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-117516487-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+
+
+
+    </body>
+</html>

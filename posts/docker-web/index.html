@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		
+		
+		<meta name="generator" content="Hugo 0.26" />
+		<title>用Docker部署一个Web应用 &middot; 4 Fish</title>
+		<link rel="shortcut icon" href="http://4fish.xyz/images/favicon.ico">
+		<link rel="stylesheet" href="http://4fish.xyz/css/style.css">
+		<link rel="stylesheet" href="http://4fish.xyz/css/highlight.css">
+
+		
+		<link rel="stylesheet" href="http://4fish.xyz/css/monosocialiconsfont.css">
+		
+
+		
+		<link href="http://4fish.xyz/index.xml" rel="alternate" type="application/rss+xml" title="4 Fish" />
+		
+
+		
+	</head>
+
+    <body>
+       <nav class="main-nav">
+	
+	
+		<a href='http://4fish.xyz/'> <span class="arrow">←</span>Home</a>
+	
+	<a href='http://4fish.xyz/posts'>Archive</a>
+	<a href='http://4fish.xyz/tags'>Tags</a>
+	<a href='http://4fish.xyz/about'>About</a>
+
+	
+
+	
+	<a class="cta" href="http://4fish.xyz/index.xml">Subscribe</a>
+	
+</nav>
+
+
+        <section id="wrapper" class="post">
+            <article>
+                <header>
+                    <h1>
+                        用Docker部署一个Web应用
+                    </h1>
+                    <h2 class="headline">
+                    Apr 18, 2017 00:00
+                    · 7472 words
+                    · 15 minute read
+                      <span class="tags">
+                      
+                      
+                          
+                              <a href="http://4fish.xyz/tags/python">python</a>
+                          
+                              <a href="http://4fish.xyz/tags/docker">docker</a>
+                          
+                      
+                      
+                      </span>
+                    </h2>
+                </header>
+                
+                <section id="post-body">
+                    <p>首先，什么是Docker?根据官网描述，我们可以得知，<a href="https://www.docker.com/what-docker">Docker</a>是一个软件/容器平台，使用了虚拟化技术(cgroups，namespaces)来实现操作系统的资源隔离和限制，对于开发人员来说，容器技术为应用的部署提供了沙盒环境，我们可以在独立的容器运行和管理应用程序进程，Docker提供的抽象层使得开发人员之间可以保持开发环境相对的一致，避免了冲突。</p>
+
+<p>下面体验下Docker的使用：</p>
+
+<p>使用下面的shell命令安装Docker</p>
+
+<pre><code>$ curl -sSL https://get.docker.com/ | sh
+</code></pre>
+
+<p>安装成功后，使用下面的命令应该能显示Docker的版本信息，说明Docker已经被安装了</p>
+
+<pre><code>$ docker -v
+Docker version 17.04.0-ce, build 4845c56
+</code></pre>
+
+<p>接着我们使用Docker创建一个nginx的容器:</p>
+
+<pre><code>$ docker run -d --name=web -p 80:80 nginx:latest
+</code></pre>
+
+<p>这条命令表示Docker基于nginx:alpine这个Docker镜像，创建一个名称为web的容器，并把容器内部的80端口与宿主机上的80端口做映射，使得通过宿主机80端口的流量转发到容器内部的80端口上。</p>
+
+<p>使用docker ps命令，可以列出正在运行的容器，可以看到，刚才基于nginx镜像创建的容器已经处于运行状态了：</p>
+
+<pre><code>$ docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                         NAMES
+a89d281829f9        nginx:latest        &quot;nginx -g 'daemon ...&quot;   8 minutes ago       Up 8 minutes        0.0.0.0:80-&gt;80/tcp, 443/tcp   web
+</code></pre>
+
+<p>现在访问宿主机地址的80端口，看到nginx的欢迎页面。</p>
+
+<p><img src="https://s1.ax2x.com/2018/04/13/NITyd.jpg" alt="img" /></p>
+
+<p>Docker容器本质上是一个运行的进程以及它需要的一些依赖，而Docker镜像则是定义这个容器的一个&rdquo;模版&rdquo;。</p>
+
+<p>使用docker images能看到目前的镜像：</p>
+
+<pre><code>$ docker images
+REPOSITORY
+nginx                 latest              bedece1f06cc        10 minutes ago         54.3MB
+</code></pre>
+
+<p>了解到这个事实之后，我们使用下面的命令进入刚才创建的容器内部</p>
+
+<pre><code>$ docker exec -i -t web bash
+</code></pre>
+
+<p>现在处于的是容器内部的根文件系统(rootfs)，它跟宿主机以及其他容器的环境是隔离开的，看起来这个容器就是一个独立的操作系统环境一样。使用ps命令可以看到容器内正在运行的进程：</p>
+
+<pre><code>$ ps -l
+PID   USER     TIME   COMMAND
+    1 root       0:00 nginx: master process nginx -g daemon off;
+    5 nginx      0:00 nginx: worker process
+   23 root       0:00 ps -l
+</code></pre>
+
+<p>使用exit命令可以从容器中退出，回到宿主机的环境：</p>
+
+<pre><code>$ exit
+</code></pre>
+
+<p>使用docker inspect命令我们可以看到关于这个容器的更多详细信息：</p>
+
+<pre><code>$ docker inspect web
+</code></pre>
+
+<p>结果是用json格式表示的容器相关信息，拉到下面的<strong>Networks</strong>一列可以看到这个容器的网络环境信息：</p>
+
+<pre><code class="language-json">&quot;Networks&quot;: {
+  &quot;bridge&quot;: {
+    &quot;IPAMConfig&quot;: null,
+    &quot;Links&quot;: null,
+    &quot;Aliases&quot;: null,
+    &quot;NetworkID&quot;: &quot;716496983db3eef8257dae57f4e0084c8242d8f5277da8a35b5ce265ccb4b3e5&quot;,
+    &quot;EndpointID&quot;: &quot;e3ab409f152e87594fe2f07e32cea2577983b352f3bba8cc99de6092682d6774&quot;,
+    &quot;Gateway&quot;: &quot;172.17.0.1&quot;,
+    &quot;IPAddress&quot;: &quot;172.17.0.2&quot;,
+    &quot;IPPrefixLen&quot;: 16,
+    &quot;IPv6Gateway&quot;: &quot;&quot;,
+    &quot;GlobalIPv6Address&quot;: &quot;&quot;,
+    &quot;GlobalIPv6PrefixLen&quot;: 0,
+    &quot;MacAddress&quot;: &quot;02:42:ac:11:00:02&quot;
+  }
+}
+</code></pre>
+
+<p>内容显示了这个容器使用了bridge桥接的方式通信，它是docker容器默认使用的网络驱动（使用docker network ls可以看到所有的驱动），从上面可以看到这个容器的IP地址为172.17.0.2，网关地址为172.17.0.1。</p>
+
+<p>现在回想刚才的例子，访问宿主机的80端口，宿主机是怎么跟容器打交道，实现转发通信的呢？</p>
+
+<p>要解决这个问题，我们首先要知道，docker在启动的时候会在宿主机上创建一块名为docker0的网卡，可以用ifconfig查看：</p>
+
+<pre><code>$ ifconfig
+docker0   Link encap:Ethernet  HWaddr 02:42:a4:e4:10:80
+          inet addr:172.17.0.1  Bcast:0.0.0.0  Mask:255.255.0.0
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:1414 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:1778 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:181802 (181.8 KB)  TX bytes:142440 (142.4 KB)
+</code></pre>
+
+<p>这个网卡的ip地址为172.17.0.1，看到这里你是否想起了刚才我们创建的容器使用的网关地址即为172.17.0.1？我们是否可以大胆地猜测，docker容器就是通过这张名为docker0的网卡进行通信呢？确实如此，以单机环境为例，Docker Daemon启动时会创建一块名为docker0的虚拟网卡，在Docker初始化时系统会分配一个IP地址绑定在这个网卡上，docker0的角色就是一个宿主机与容器间的网桥，作为一个二层交换机，负责数据包的转发。当使用docker创建一个容器时，如果使用了bridge模式，docker会创建一个vet对，一端绑定到docker0上，而另一端则作为容器的eth0虚拟网卡。</p>
+
+<p>使用ifconfig也可以看到这个veth对的存在：</p>
+
+<pre><code>veth8231e5b Link encap:Ethernet  HWaddr 16:e8:f2:1d:e1:4d
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:29 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:29 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:4033 (4.0 KB)  TX bytes:3741 (3.7 KB)
+</code></pre>
+
+<p>我找了一张图，可以很好地表示veth对的存在方式：</p>
+
+<p><img src="https://s1.ax2x.com/2018/04/13/NIOy6.jpg" alt="img" /></p>
+
+<p>而真正实现端口转发的魔法的是nat规则。如果容器使用-p指定映射的端口时，docker会通过iptables创建一条nat规则，把宿主机打到映射端口的数据包通过转发到docker0的网关，docker0再通过广播找到对应ip的目标容器，把数据包转发到容器的端口上。反过来，如果docker要跟外部的网络进行通信，也是通过docker0和iptables的nat进行转发，再由宿主机的物理网卡进行处理，使得外部可以不知道容器的存在。</p>
+
+<p>使用iptables -t nat命令可以看到添加的nat规则：</p>
+
+<pre><code>$ iptables -t nat -xvL
+Chain PREROUTING (policy ACCEPT 376 packets, 21292 bytes)
+    pkts      bytes target     prot opt in     out     source               destination
+   78606  4609864 DOCKER     all  --  any    any     anywhere             anywhere             ADDRTYPE match dst-type LOCAL
+
+Chain INPUT (policy ACCEPT 376 packets, 21292 bytes)
+    pkts      bytes target     prot opt in     out     source               destination
+
+Chain OUTPUT (policy ACCEPT 286 packets, 21190 bytes)
+    pkts      bytes target     prot opt in     out     source               destination
+       0        0 DOCKER     all  --  any    any     anywhere            !127.0.0.0/8          ADDRTYPE match dst-type LOCAL
+
+Chain POSTROUTING (policy ACCEPT 290 packets, 21430 bytes)
+    pkts      bytes target     prot opt in     out     source               destination
+       0        0 MASQUERADE  all  --  any    !docker0  172.17.0.0/16        anywhere
+       0        0 MASQUERADE  tcp  --  any    any     172.17.0.2           172.17.0.2           tcp dpt:http
+
+Chain DOCKER (2 references)
+    pkts      bytes target     prot opt in     out     source               destination
+       0        0 RETURN     all  --  docker0 any     anywhere             anywhere
+       4      240 DNAT       tcp  --  !docker0 any     anywhere             anywhere             tcp dpt:http to:172.17.0.2:80
+</code></pre>
+
+<p>从上面的最后一行可以观察到流量转发到了172.17.0.2的80端口上，这个地址就是刚才创建容器使用的IP地址。</p>
+
+<p>现在知道在刚才的例子中宿主机是怎么跟容器通信了吧，那么容器跟容器之间通信呢？类似地，也是通过这个docker0交换机进行广播和转发。</p>
+
+<p>扯的有点多，开始进入正题，先写一个Web应用压压惊。</p>
+
+<p>一般情况下，如果你要编写一个Web项目，你会做什么呢？反正对于我来说，如果我要写一个python web项目的话，我会先用virtualenv建立一个隔离环境，进入环境内，使用pip安装Django，最后用django-admin startproject创建一个项目，搞定。</p>
+
+<p>但是如果用容器化的方式思考，我们大可直接借助于容器的隔离性优势，更好地控制环境和版本的隔离，通常情况下你都不需要再关心用pyenv，virtualenv这种方式来初始化python环境的了，一切交给docker来完成吧。</p>
+
+<p>甚至把安装django这个步骤也省了，直接通过一句命令来拉取一个安装了django的Python环境的镜像。</p>
+
+<pre><code>$ docker pull django
+</code></pre>
+
+<p>现在通过这个镜像运行django容器，同时进入容器Shell环境：</p>
+
+<pre><code>$ docker run -it --name=app -p 8080:8000 django bash
+</code></pre>
+
+<p>在/usr/src这个目录下新建一个app目录，然后用django-admin命令新建一个django项目：</p>
+
+<pre><code>$ cd /usr/src
+$ mkdir app
+$ cd app
+$ django-admin startproject django_app
+</code></pre>
+
+<p>然后使用下面的命令，在容器8000端口上运行这个应用：</p>
+
+<pre><code>$ python manage.py makemigartions
+$ python manage.py migrate
+$ python manage.py runserver 0.0.0.0:8000 &amp;
+</code></pre>
+
+<p>由于之前已经将容器的8000端口与宿主机的8080端口做了映射，因此我们可以通过访问宿主机的8080端口访问这个应用。</p>
+
+<pre><code>$ exit #退出容器
+$ curl -L http://127.0.0.1:8080/
+</code></pre>
+
+<p>注意了，对这个容器的所有修改仅仅只对这个容器有效，不会影响到镜像和基于镜像创建的其他容器，当这个容器被销毁之后，所做的修改也就随之销毁。</p>
+
+<p>下面新建一个应用ping，作用是统计该应用的访问次数，每次访问页面将次数累加1，返回响应次数给前端页面，并把访问次数存到数据库中。</p>
+
+<p>使用redis作为ping的数据库，与之前类似，拉取redis的镜像，运行容器。</p>
+
+<pre><code>$ docker pull redis
+$ docker run -d --name=redis -p 6379 redis
+</code></pre>
+
+<p>由于django容器需要与redis容器通信的话首先要知道它的ip地址，但是像刚才那样，每次都手工获取容器的ip地址显然是一件繁琐的事情，于是我们需要修改容器的启动方式，加入—link参数，建立django容器与redis容器之间的联系。</p>
+
+<p>删除掉之前的容器，现在重新修改django容器的启动方式：</p>
+
+<pre><code>$ docker run -it --name=app -p 8080:8000 -v /code:/usr/src/app --link=redis:db django bash
+</code></pre>
+
+<p>这次加入了两个参数：</p>
+
+<ul>
+<li><strong>-v /code:/usr/src/app</strong> 表示把宿主机上的/code目录挂载到容器内的/usr/src/app目录，可以通过直接管理宿主机上的挂载目录来管理容器内部的挂载目录。</li>
+<li><strong>&ndash;link=redis:db</strong> 表示把redis容器以db别名与该容器建立关系，在该容器内以db作为主机名表示了redis容器的主机地址。</li>
+</ul>
+
+<p>现在进入到django容器，通过ping命令确认django容器能访问到redis容器：</p>
+
+<pre><code>$ ping db
+PING db (192.168.32.12): 56 data bytes
+64 bytes from 192.168.32.12: icmp_seq=0 ttl=64 time=0.463 ms
+64 bytes from 192.168.32.12: icmp_seq=1 ttl=64 time=0.086 ms
+</code></pre>
+
+<p>像之前一样，建立一个项目，接着使用django-admin新建一个应用：</p>
+
+<pre><code>$ django-admin startapp ping
+</code></pre>
+
+<p>编写ping的视图，添加到项目的urls.py：</p>
+
+<pre><code>from django.shortcuts import render
+from django.http import HttpResponse
+import redis
+
+rds = redis.StrictRedis('db', 6379)
+
+def ping(request):
+    rds.incr('count', 1)
+    cnt = rds.get('count')
+    cnt = b'0' if cnt is None else cnt
+    return HttpResponse(cnt.decode())
+
+''' urls.py
+from pingtest.views import ping
+
+urlpatterns = [
+    url(r'^admin/', admin.site.urls),
+    url(r'^$', ping)
+]
+'''
+</code></pre>
+
+<p>别忘了安装redis的python驱动：</p>
+
+<pre><code>$ pip install redis
+</code></pre>
+
+<p>运行django应用，访问应用的根地址，如无意外便能看到随着页面刷新累加的数字。</p>
+
+<pre><code>$ curl http://127.0.0.1/
+3243
+$ curl http://127.0.0.1/
+3244
+</code></pre>
+
+<p>你或许会想，每次创建一个容器都要手工做这么多操作，好麻烦，有没有更方便的方式地来构建容器，不需要做那么多额外的环境和依赖安装呢？</p>
+
+<p>仔细一想，其实我们创建的容器都是建立在基础镜像上的，那么有没有办法，把修改好的容器作为基础镜像，以后需要创建容器的时候都使用这个新的镜像呢？当然可以，使用docker commit [CONTAINER]的方式可以将改动的容器导出为一个Docker镜像。</p>
+
+<p>当然，更灵活的方式是编写一个Dockerfile来构建镜像，正如Docker镜像是定义Docker容器的模版，Dockerfile则是定义Docker镜像的文件。下面我们来编写一个Dockerfile，以定义出刚才我们进行改动后的容器导出的镜像。</p>
+
+<p>下面加入supervisor和gunicorn以更好地监控和部署应用进程：</p>
+
+<p>gunicorn的配置文件：</p>
+
+<pre><code class="language-python">import multiprocessing
+
+bind = &quot;0.0.0.0:8000&quot;
+workers = multiprocessing.cpu_count() * 2 + 1
+worker_class = 'meinheld.gmeinheld.MeinheldWorker'
+user = 'root'
+loglevel = 'warning'
+reload = True
+accesslog = '-' #to supervisord's stdout
+#errorlog
+</code></pre>
+
+<p>supervisord的配置文件：</p>
+
+<pre><code class="language-ini">[supervisord]
+nodaemon=true
+logfile_maxbytes=10MB
+loglevel=debug
+
+[program:ping]
+command=gunicorn -c /etc/gunicorn_conf.py django_app.wsgi:application
+directory=/usr/src/app
+user=root
+process_name=root
+numprocs=1
+autostart=true
+autorestart=true
+redirect_stderr=True
+</code></pre>
+
+<p>以supervisord作为web应用容器的启动进程，supervisord来管理gunicorn的进程。这里说明一下的是，由于使用docker logs命令来打印容器的日志时默认是从启动进程（supervisord）的stdout和stderr里收集的，而gunicorn又作为supervisord的派生进程存在，因此要正确配置gunicorn和supervisord的日志选项，才能从docker logs中看到有用的信息。</p>
+
+<p>把上面所做的修改混杂在一起，终于得出了第一个Dockerfile：</p>
+
+<pre><code class="language-dockerfile">FROM django:latest
+
+COPY ./app /usr/src/app
+
+COPY supervisord.conf /etc/supervisord.conf
+
+COPY gunicorn_conf.py /etc/gunicorn_conf.py
+
+RUN apt-get update &amp;&amp; \
+    apt-get install -y supervisor &amp;&amp; \
+    rm -rf /var/lib/apt/lists/*
+
+RUN pip install meinheld &amp;&amp; \
+    pip install gunicorn &amp;&amp; \
+    cd /usr/src/app &amp;&amp; \
+    pip install -r requirement.txt &amp;&amp; \
+    python manage.py makemigrations &amp;&amp; \
+    python manage.py migrate
+
+WORKDIR /usr/src/app
+
+CMD supervisord -c /etc/supervisord.conf
+</code></pre>
+
+<p>上面的Dockerfile的说明如下：</p>
+
+<ul>
+<li>FROM指令制定了该镜像的基础镜像为django:latest。</li>
+<li>三行COPY指令分别将宿主机的代码文件和配置文件复制到容器环境的对应位置。</li>
+<li>接着两行RUN指令，一条指令安装supervisor，另一条指令安装python的依赖以及初始化django应用。</li>
+<li>最后运行supervisord，配置为刚才复制的supervisor的配置文件。</li>
+</ul>
+
+<p>上面每一条指令都会由docker容器执行然后提交为一个镜像，叠在原来的镜像层的上方，最后得到一个拥有许多镜像层叠加的最终镜像。</p>
+
+<p>完成Dockerfile的编写后，只需要用docker build命令就能构建出一个新的镜像：</p>
+
+<pre><code>docker build -t test/app .
+</code></pre>
+
+<p>接着就可以根据这个镜像来创建和运行容器了：</p>
+
+<pre><code>$ docker run -d --name=app -p 8080:8000 -v /code:/usr/src/app --link=redis:db test/app
+</code></pre>
+
+<p>目前为止，项目的应用结构图如下：</p>
+
+<p><img src="https://s1.ax2x.com/2018/04/13/NIzFr.jpg" alt="img" /></p>
+
+<p>现在，如果Redis这个节点出现故障的话会怎么样？</p>
+
+<p>答案是，整个服务都会不可用了，更糟糕的是，数据备份和恢复同步成为了更棘手的问题。</p>
+
+<p>很明显，我们不能只依赖一个节点，还要通过建立主从节点防止数据的丢失。再创建两个redis容器，通过slaveof指令为Redis建立两个副本。</p>
+
+<pre><code>$ docker run -d --name=redis_slave_1 -p 6380:6379 --link=redis:master redis redis-server --slaveof master 6379
+$ docker run -d --name=redis_slave_2 -p 6381:6379 --link=redis:master redis redis-server --slaveof master 6379
+</code></pre>
+
+<p>现在写入到Redis主节点的数据都会在从节点上备份一份数据。</p>
+
+<p><img src="https://s1.ax2x.com/2018/04/13/NIVuY.jpg" alt="img" /></p>
+
+<p>现在看起来好多了，然而当Redis master挂掉之后，服务仍然会变的不可用，所以当master宕机时还需要通过选举的方式把新的master节点推上去（故障迁移），Redis Sentinel正是一个合适的方式，我们建立Sentinel集群来监控Redis master节点，当master节点不可用了，再由Sentinel集群根据投票选举出slave节点作为新的master。</p>
+
+<p>下面为Sentinel编写Dockerfile，在redis镜像的基础上作改动：</p>
+
+<pre><code class="language-dockerfile">FROM redis:latest
+
+COPY run-sentinel.sh /run-sentinel.sh
+
+COPY sentinel.conf /etc/sentinel.conf
+
+RUN chmod +x /run-sentinel.sh
+
+ENTRYPOINT [&quot;/run-sentinel.sh&quot;]
+</code></pre>
+
+<p>Sentinel的配置文件：</p>
+
+<pre><code>port 26379
+
+dir /tmp
+
+sentinel monitor master redis-master 6379 2
+
+sentinel down-after-milliseconds master 30000
+
+sentinel parallel-syncs master 1
+
+sentinel failover-timeout master 180000
+</code></pre>
+
+<p>run-sentinel.sh：</p>
+
+<pre><code class="language-bash">#!/bin/bash
+
+exec redis-server /etc/sentinel.conf --sentinel
+</code></pre>
+
+<p>构建出Sentinel的镜像文件，容器运行的方式类似于redis：</p>
+
+<pre><code>$ docker run -d --name=sentinel_1 --link=redis:redis-master [build_sentinel_image]
+$ docker run -d --name=sentinel_2 --link=redis:redis-master [build_sentinel_image]
+$ docker run -d --name=sentinel_3 --link=redis:redis-master [build_sentinel_image]
+</code></pre>
+
+<p>这下Sentinel的容器也搭建起来了，应用的结构图如下：</p>
+
+<p><img src="https://s1.ax2x.com/2018/04/13/NI0wy.jpg" alt="img" /></p>
+
+<p>简单验证一下当redis主节点挂掉后sentinel怎么处理：</p>
+
+<pre><code>$ docker pause redis-master
+$ docker logs -f --tail=100 sentinel_1
+1:X 17 Apr 14:32:51.633 # +sdown master master 192.168.32.12 6379
+1:X 17 Apr 14:32:52.006 # +new-epoch 1
+1:X 17 Apr 14:32:52.007 # +vote-for-leader 35ff9e1686f3425f4cbe5680a741e366a1863cae 1
+1:X 17 Apr 14:32:52.711 # +odown master master 192.168.32.12 6379 #quorum 3/2
+1:X 17 Apr 14:32:52.711 # Next failover delay: I will not start a failover before Mon Apr 17 14:33:02 2017
+1:X 17 Apr 14:32:53.221 # +config-update-from sentinel 35ff9e1686f3425f4cbe5680a741e366a1863cae 192.168.32.7 26379 @ master 192.168.32.12 6379
+1:X 17 Apr 14:32:53.221 # +switch-master master 192.168.32.12 6379 192.168.32.5 6379
+1:X 17 Apr 14:32:53.221 * +slave slave 192.168.32.6:6379 192.168.32.6 6379 @ master 192.168.32.5 6379
+1:X 17 Apr 14:32:53.221 * +slave slave 192.168.32.12:6379 192.168.32.12 6379 @ master 192.168.32.5 6379
+$ docker exec -it sentinel_1 redis-cli -p 26379 info Sentinel
+# Sentinel
+sentinel_masters:1
+sentinel_tilt:0
+sentinel_running_scripts:0
+sentinel_scripts_queue_length:0
+sentinel_simulate_failure_flags:0
+master0:name=master,status=ok,address=192.168.32.5:6379,slaves=2,sentinels=3
+</code></pre>
+
+<p>修改代码用Sentinel获取redis实例：</p>
+
+<pre><code class="language-python">sentinel = Sentinel([('sentinel', 26379)])
+rds = sentinel.master_for('master')
+</code></pre>
+
+<p>下面再来考虑这种情况：</p>
+
+<p><img src="https://s1.ax2x.com/2018/04/13/NIWGX.jpg" alt="img" /></p>
+
+<p>假设我们对django_app容器进行伸缩，扩展出三个一模一样的django应用容器，这时候怎么办，该访问哪个？显然，这时候需要一个负载均衡的工具作为web应用的前端，做反向代理。</p>
+
+<p>nginx是一个非常流行的web服务器，用它完成这个当然没问题，这里不说了。</p>
+
+<p>下面说一说个人尝试过的两种选择：</p>
+
+<p><strong>LVS</strong>（Linux Virtual Server）作为最外层的服务，负责对系统到来的请求做负载均衡，转发到后端的服务器（Real Server）上，DR（Direct Route）算法是指对请求报文的数据链路层进行修改mac地址的方式，转发到后端的一台服务器上，后端的服务器集群只需要配置和负载均衡服务器一样的虚拟IP（VIP），请求就会落到对应mac地址的服务器上，跟NAT模式相比，DR模式不需要修改目的IP地址，因此在返回响应时，服务器可以直接将报文发送给客户端，而无须转发回负载均衡服务器，因此这种模式也叫做三角传输模式。</p>
+
+<p><img src="https://s1.ax2x.com/2018/04/13/NIdEl.jpg" alt="img" /></p>
+
+<p><strong>Haproxy</strong>是一个基于TCP/HTTP的负载均衡工具，在负载均衡上有许多精细的控制。下面简单地使用Haproxy来完成上面的负载均衡和转发。</p>
+
+<p>首先把haproxy的官方镜像下载下来：</p>
+
+<pre><code>$ docker pull haproxy
+</code></pre>
+
+<p>这类的镜像的Dockerfile都可以在Docker Hub上找到。</p>
+
+<p>这次同样选择编写Dockerfile的方式构建自定的haproxy镜像：</p>
+
+<pre><code>FROM haproxy:latest
+
+COPY haproxy.cfg /usr/local/etc/haproxy/haproxy.cfg
+</code></pre>
+
+<p>暂时只需要把配置文件复制到配置目录就可以了，因为通过看haproxy的Dockerfile可以看到最后有这么一行，于是乎偷个懒~</p>
+
+<pre><code>CMD [&quot;haproxy&quot;, &quot;-f&quot;, &quot;/usr/local/etc/haproxy/haproxy.cfg&quot;]
+</code></pre>
+
+<p>haproxy的配置文件如下：</p>
+
+<pre><code>global
+    log 127.0.0.1 local0
+    maxconn 4096
+    daemon
+    nbproc 4
+
+defaults
+    log 127.0.0.1 local3
+    mode http
+    option dontlognull
+    option redispatch
+    retries 2
+    maxconn 2000
+    balance roundrobin
+    timeout connect 5000ms
+    timeout client 5000ms
+    timeout server 5000ms
+
+frontend main
+    bind *:6301
+    default_backend webserver
+
+backend webserver
+    server app1 app1:8000 check inter 2000 rise 2 fall 5
+    server app2 app2:8000 check inter 2000 rise 2 fall 5
+    server app3 app3:8000 check inter 2000 rise 2 fall 5
+</code></pre>
+
+<p>这里的app即web应用容器的主机名，运行haproxy容器时用link连接三个web应用容器，绑定到宿主机的80端口。</p>
+
+<pre><code>$ docker run -d --name=lb -p 80:6301 --link app1:app1 --link app2:app2 --link app3:app3  [build_haproxy_image]
+</code></pre>
+
+<p>这时候访问宿主机的80端口后，haproxy就会接管请求，用roundrobin方式轮询代理到后端的三个容器上，实现健康检测和负载均衡。</p>
+
+<p><img src="https://s1.ax2x.com/2018/04/13/NIb8p.jpg" alt="img" /></p>
+
+<p>现在又有一个问题了，每次我们想增加或者减少web应用的数量时，都要修改haproxy的配置并重启haproxy，十分的不方便。</p>
+
+<p>理想的方式是haproxy能自动检测到后端服务器的运行状况并相应调整配置，好在这种方式不难，我们可以使用etcd作为后端服务器的服务发现工具，把服务器的信息写入到etcd的数据库中，再由confd来间隔一段时间去访问etcd的api，将服务器的信息写入到模版配置中，并更新haproxy的文件以及重启haproxy进程。</p>
+
+<p>按官方的说法，etcd是一个可靠的分布式的KV存储系统，而confd则是使用模版和数据管理应用配置的一个工具，关于他俩我还没太多了解，所以不多说，下面把他们集成到上面的应用中。</p>
+
+<p>创建一个etcd的容器：</p>
+
+<pre><code>docker run -d \
+-e CLIENT_URLS=http://0.0.0.0:2379 \
+-e PEER_URLS=http://0.0.0.0:2380 \
+-p 2379:2379 \
+-p 2380:2380 \
+-p 4001:4001 \
+-p 7001:7001 \
+-v /etc/ssl/certs/:/etc/ssl/certs/ \
+elcolio/etcd \
+-name etcd \
+-initial-cluster-token=etcd-cluster-1 \
+-initial-cluster=&quot;etcd=http://etcd:2380&quot;\
+-initial-cluster-state=new \
+-advertise-client-urls=http://etcd:2379 \
+-initial-advertise-peer-urls http://etcd:2380
+</code></pre>
+
+<p>confd的处理比较简单，把confd的二进制文件和配置文件集成到之前haproxy的Dockerfile中：</p>
+
+<pre><code class="language-dockerfile">FROM haproxy:latest
+
+COPY haproxy.cfg /usr/local/etc/haproxy/haproxy.cfg
+
+COPY confd .
+
+RUN chmod +x confd
+
+COPY haproxy.toml /etc/confd/conf.d/
+
+COPY haproxy.tmpl /etc/confd/templates/
+
+COPY boot.sh .
+
+COPY watcher.sh .
+
+CMD [&quot;./boot.sh&quot;]
+</code></pre>
+
+<p>通过之前haproxy的配置文件创建出新的模版文件，修改backend的配置，加入模版指令，表示confd从etcd的前缀为/app/servers的所有key中获取键值对，作为server的key的value，逐条追加到配置文件中去：</p>
+
+<pre><code>backend webserver
+    {{range gets &quot;/app/servers/*&quot;}}
+    server {{base .Key}} {{.Value}} check inter 2000 rise 2 fall 5
+    {{end}}
+</code></pre>
+
+<p>下面是confd的配置文件：</p>
+
+<pre><code class="language-ini">[template]
+src = &quot;haproxy.tmpl&quot;
+dest = &quot;/usr/local/etc/haproxy/haproxy.cfg&quot;
+keys = [
+    &quot;/app/servers&quot;
+]
+owner = &quot;root&quot;
+mode = &quot;0644&quot;
+reload_cmd = &quot;kill -HUP 1&quot;
+</code></pre>
+
+<p>confd会把数据填入上面的模版文件，并把配置更新到haproxy配置的目标路径，再使用reload_cmd指定的命令重启haproxy。</p>
+
+<p>修改后的haproxy镜像最后通过boot.sh启动进程：</p>
+
+<pre><code class="language-bash">#!/bin/bash
+
+./watcher.sh &amp;
+
+exec /docker-entrypoint.sh haproxy -f /usr/local/etc/haproxy/haproxy.cfg
+</code></pre>
+
+<p>watcher.sh启动了confd间隔一段时间去访问etcd的地址，检查是否有更新：</p>
+
+<pre><code>./confd -interval 10 -node http://etcd:2379 -config-file /etc/confd/conf.d/haproxy.toml
+</code></pre>
+
+<p>启动haproxy时建立与etcd容器间的连接：</p>
+
+<pre><code>$ docker run -d --name=lb -p 80:6301 --link app1:app1 --link app2:app2 --link app3:app3  --link=etcd:etcd [build_haproxy_image]
+</code></pre>
+
+<p>下面通过调用etcd的api在/app/servers上新建一个服务器节点：</p>
+
+<pre><code>$ docker exec -it etcd etcdctl set /app/servers/app1 172.17.0.5:8000
+</code></pre>
+
+<p>观察haproxy容器的日志，可以看到配置被更新了：</p>
+
+<pre><code>$ docker logs -f lb
+2017-04-16T16:24:00Z 78745b65a3d4 ./confd[7]: INFO Backend set to etcd
+&lt;7&gt;haproxy-systemd-wrapper: executing /usr/local/sbin/haproxy -p /run/haproxy.pid -f /usr/local/etc/haproxy/haproxy.cfg -Ds
+2017-04-16T16:24:00Z 78745b65a3d4 ./confd[7]: INFO Starting confd
+2017-04-16T16:24:00Z 78745b65a3d4 ./confd[7]: INFO Backend nodes set to http://etcd:2379
+2017-04-16T16:24:00Z 78745b65a3d4 ./confd[7]: INFO /usr/local/etc/haproxy/haproxy.cfg has md5sum 8e6fc297a13fbb556426f55e130cecf4 should be f5e8a4b8fbea0b20da3796334bac1ddb
+2017-04-16T16:24:00Z 78745b65a3d4 ./confd[7]: INFO Target config /usr/local/etc/haproxy/haproxy.cfg out of sync
+2017-04-16T16:24:00Z 78745b65a3d4 ./confd[7]: INFO Target config /usr/local/etc/haproxy/haproxy.cfg has been updated
+&lt;5&gt;haproxy-systemd-wrapper: re-executing on SIGHUP.
+&lt;7&gt;haproxy-systemd-wrapper: executing /usr/local/sbin/haproxy -p /run/haproxy.pid -f /usr/local/etc/haproxy/haproxy.cfg -Ds -sf 15 16 17 18
+</code></pre>
+
+<p>最终的应用结构图如下：</p>
+
+<p><img src="https://s1.ax2x.com/2018/04/13/NIj7J.jpg" alt="img" /></p>
+
+<p>运行在机器上的服务时刻有可能有意外发生，因此我们需要一个服务来监控机器的运行情况和容器的资源占用。netdata是服务器的一个实时监测工具，利用它可以直观简洁地了解到服务器的运行情况。</p>
+
+<p><img src="https://s1.ax2x.com/2018/04/13/NIMYB.jpg" alt="img" /></p>
+
+<p>当docker镜像和容器数量增多的情况下，手工去运行和定义docker容器以及其相关依赖无疑是非常繁琐和易错的工作。Docker Compose是由Docker官方提供的一个容器编排和部署工具，我们只需要定义好docker容器的配置文件，用compose的一条命令即可自动分析出容器的启动顺序和依赖，快速的部署和启动容器。</p>
+
+<p>下面编写好compose的文件：</p>
+
+<pre><code class="language-yaml">version: '2.1'
+services:
+  haproxy:
+    container_name: lb
+    build: ./builds/haproxy
+    ports:
+     - 80:6301
+    restart: always
+    links:
+    - ping-app
+    - etcd:etcd
+    - netdata:netdata
+
+  ping-app:
+    build: .
+    restart: always
+    volumes:
+    - ./app:/usr/src/app
+    links:
+    - sentinel
+    - redis-master:db
+
+  redis-master:
+    image: redis:latest
+    ports:
+     - 6379:6379
+    restart: always
+
+  redis-slave:
+    image: redis:latest
+    command: redis-server --slaveof master 6379
+    restart: always
+    links:
+    - redis-master:master
+ 
+  sentinel:
+    build: ./builds/sentinel
+    restart: always
+    links:
+    - redis-master:redis-master
+    - redis-slave
+
+  etcd:
+    image: elcolio/etcd
+    command: -name etcd -initial-cluster-token=etcd-cluster-1 -initial-cluster=&quot;etcd=http://etcd:2380&quot; -initial-cluster-state=new -advertise-client-urls=http://etcd:2379 -initial-advertise-peer-urls http://etcd:2380
+    environment:
+     - CLIENT_URLS=http://0.0.0.0:2379
+     - PEER_URLS=http://0.0.0.0:2380
+    ports:
+     - 2379:2379
+     - 2380:2380
+     - 4001:4001
+     - 7001:7001
+    volumes:
+     - /etc/ssl/certs/:/etc/ssl/certs/
+
+  netdata:
+    image: titpetric/netdata
+    restart: always
+    cap_add:
+     - SYS_PTRACE
+    volumes:
+     - /proc:/host/proc:ro
+     - /sys:/host/sys:ro
+</code></pre>
+
+<p>只需几条命令，就能启动和伸缩容器：</p>
+
+<pre><code>docker-compose -f docker-compose.yml up -d
+docker-compose -f docker-compose.yml scale redis-slave=2
+docker-compose -f docker-compose.yml scale sentinel=3
+docker-compose -f docker-compose.yml scale ping-app=3
+</code></pre>
+
+<p>再通过一个脚本把web应用注册到etcd中去：</p>
+
+<pre><code class="language-bash">APP_SERVERS=$(docker-compose -f docker-compose.yml ps ping-app | awk '{print $1}' |sed '1,2d'|xargs docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' | xargs)
+APP_SERVER_PORT=8000
+INDEX=1
+for ETCD_NODE in ${APP_SERVERS//\s/};
+do
+    docker-compose -f docker-compose.yml exec etcd etcdctl set /app/servers/app$INDEX $ETCD_NODE:$APP_SERVER_PORT
+    INDEX=$(expr $INDEX + 1)
+done
+</code></pre>
+
+<p>就这样，一个基于Docker构建并具有良好可用性的web应用就完成了。</p>
+
+                </section>
+            </article>
+
+            
+
+            
+
+            
+
+            <footer id="footer">
+    
+    <p class="small">
+    
+       © Copyright 2018 <i class="fa fa-heart" aria-hidden="true"></i> 
+    
+    </p>
+    <p class="small">
+        Powered by <a href="http://www.gohugo.io/">Hugo</a> Theme By <a href="https://github.com/nodejh/hugo-theme-cactus-plus">nodejh</a>
+    </p>
+</footer>
+
+        </section>
+
+        <script src="http://4fish.xyz/js/jquery-3.3.1.min.js"></script>
+<script src="http://4fish.xyz/js/main.js"></script>
+<script src="http://4fish.xyz/js/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+  
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-117516487-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+
+
+
+    </body>
+</html>

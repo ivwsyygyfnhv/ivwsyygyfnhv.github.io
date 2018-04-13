@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Design on 4 Fish</title>
+    <link>http://4fish.xyz/tags/design/</link>
+    <description>Recent content in Design on 4 Fish</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Wed, 15 Mar 2017 00:00:00 +0800</lastBuildDate>
+    
+	<atom:link href="http://4fish.xyz/tags/design/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Active Record和Data Mapper</title>
+      <link>http://4fish.xyz/posts/active-record-and-data-mapper/</link>
+      <pubDate>Wed, 15 Mar 2017 00:00:00 +0800</pubDate>
+      
+      <guid>http://4fish.xyz/posts/active-record-and-data-mapper/</guid>
+      <description>概念 在《企业领域架构模式》中，Martin Flower提出架构模式要解决的问题是驱动领域逻辑访问数据库的方式，尽管SQL在当今已广泛应用，但</description>
+    </item>
+    
+  </channel>
+</rss>

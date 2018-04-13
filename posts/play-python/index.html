@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		
+		
+		<meta name="generator" content="Hugo 0.26" />
+		<title>Play Python &middot; 4 Fish</title>
+		<link rel="shortcut icon" href="http://4fish.xyz/images/favicon.ico">
+		<link rel="stylesheet" href="http://4fish.xyz/css/style.css">
+		<link rel="stylesheet" href="http://4fish.xyz/css/highlight.css">
+
+		
+		<link rel="stylesheet" href="http://4fish.xyz/css/monosocialiconsfont.css">
+		
+
+		
+		<link href="http://4fish.xyz/index.xml" rel="alternate" type="application/rss+xml" title="4 Fish" />
+		
+
+		
+	</head>
+
+    <body>
+       <nav class="main-nav">
+	
+	
+		<a href='http://4fish.xyz/'> <span class="arrow">←</span>Home</a>
+	
+	<a href='http://4fish.xyz/posts'>Archive</a>
+	<a href='http://4fish.xyz/tags'>Tags</a>
+	<a href='http://4fish.xyz/about'>About</a>
+
+	
+
+	
+	<a class="cta" href="http://4fish.xyz/index.xml">Subscribe</a>
+	
+</nav>
+
+
+        <section id="wrapper" class="post">
+            <article>
+                <header>
+                    <h1>
+                        Play Python
+                    </h1>
+                    <h2 class="headline">
+                    Mar 9, 2017 00:00
+                    · 1311 words
+                    · 3 minute read
+                      <span class="tags">
+                      
+                      
+                          
+                              <a href="http://4fish.xyz/tags/python">python</a>
+                          
+                      
+                      
+                      </span>
+                    </h2>
+                </header>
+                
+                <section id="post-body">
+                    <p>Hello World</p>
+
+<pre><code class="language-python">In [1]: import __hello__
+Hello world!
+</code></pre>
+
+<p>查看API手册</p>
+
+<pre><code>~ python
+11/17 17:02:27 2016
+Python 2.7.12 (default, Jun 29 2016, 14:05:02)
+[GCC 4.2.1 Compatible Apple LLVM 7.3.0 (clang-703.0.31)] on darwin
+Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.
+&gt;&gt;&gt; help()
+
+Welcome to Python 2.7!  This is the online help utility.
+
+If this is your first time using Python, you should definitely check out
+the tutorial on the Internet at http://docs.python.org/2.7/tutorial/.
+
+Enter the name of any module, keyword, or topic to get help on writing
+Python programs and using Python modules.  To quit this help utility and
+return to the interpreter, just type &quot;quit&quot;.
+
+To get a list of available modules, keywords, or topics, type &quot;modules&quot;,
+&quot;keywords&quot;, or &quot;topics&quot;.  Each module also comes with a one-line summary
+of what it does; to list the modules whose summaries contain a given word
+such as &quot;spam&quot;, type &quot;modules spam&quot;.
+
+help&gt; os.path
+
+help&gt;
+
+--------- ipython ----------
+
+In [1]: import os
+
+In [2]: os.path?
+Type:        module
+String form: &lt;module 'posixpath' from '/usr/local/Cellar/python3/3.6.0/Frameworks/Python.framework/Versions/3.6/lib/python3.6/posixpath.py'&gt;
+File:        /usr/local/Cellar/python3/3.6.0/Frameworks/Python.framework/Versions/3.6/lib/python3.6/posixpath.py
+Docstring:
+Common operations on Posix pathnames.
+
+Instead of importing this module directly, import os and refer to
+this module as os.path.  The &quot;os.path&quot; name is an alias for this
+module on Posix systems; on other systems (e.g. Mac, Windows),
+os.path provides the same operations in a manner specific to that
+platform, and is an alias to another module (e.g. macpath, ntpath).
+
+Some of this can actually be useful on non-Posix systems too, e.g.
+for manipulation of the pathname component of URLs.
+
+In [3]: os.path??
+</code></pre>
+
+<p>遍历列表</p>
+
+<pre><code class="language-python">array = [1, 2, 3, 4, 5]
+
+for i in range(len(array)):
+    print (i, array[i])
+    
+# Pythonic 
+for i, item in enumerate(array):
+    print (i, item)
+</code></pre>
+
+<p>对列表的操作</p>
+
+<pre><code class="language-python">array = [1, 2, 3, 4, 5]
+
+new_array = []
+for item in array:
+    new_array.append(str(item))
+
+# Pythonic
+new_array = [str(item) for item in array]
+
+# Generator
+new_array = (str(item) for item in array)
+
+# 函数式
+new_array = map(str, array)
+</code></pre>
+
+<p>列表推导</p>
+
+<pre><code class="language-python"># 生成列表
+[ i*i for i in range(10) if i % 2 == 0 ]
+# 生成集合
+{ i*i for i in range(10) if i % 2 == 0 }
+# 生成字典
+{ i:i for i in range(10) if i % 2 == 0 }
+</code></pre>
+
+<p>上下文管理器</p>
+
+<pre><code class="language-python">file = open('file', 'w')
+file.write(123)
+file.close()
+
+# Pythonic
+with open('file', 'w') as file:
+    file.write(123)
+</code></pre>
+
+<p>条件判断</p>
+
+<pre><code class="language-python">if x is True:
+    y = 1
+else:
+    y = -1
+
+# Pythonic
+y = 1 if x is True else -1
+</code></pre>
+
+<p>构造矩阵</p>
+
+<pre><code class="language-python">y = [0 for _ in range(100000000)]
+# Pythonic
+y = [0] * 100000000
+</code></pre>
+
+<p>装饰器</p>
+
+<pre><code class="language-python">def logic(x):
+    if x &lt; 0:
+        return False
+    print (x)
+    return True
+
+#Pythonic
+def check_gt_zero(func):
+    def wrapper(x):
+        if x &lt; 0:
+            return False
+        return func(x)
+    return wrapper 
+
+@check_gt_zero
+def logic(x):
+    print (x)
+    return True
+</code></pre>
+
+<p>变量交换</p>
+
+<pre><code class="language-python">temp = y
+y = x
+x = temp
+
+# Pythonic
+x, y = y, x
+</code></pre>
+
+<p>切片</p>
+
+<pre><code class="language-python">array = [1, 2, 3, 4, 5]
+
+l = len(array)
+for i in range(l/2):
+    temp = array[l - i - 1]
+    array[l - i - 1] = array[i]
+    array[i] = temp
+
+array = list(reversed(array))
+# Pythonic
+array = array[::-1]
+</code></pre>
+
+<p>读取文件</p>
+
+<pre><code class="language-python">CHUNK_SIZE = 1024
+
+with open('test.json') as f:
+    chunk = f.read(CHUNK_SIZE)
+    while chunk:
+        if chunk:
+            print(chunk)
+        chunk = f.read(CHUNK_SIZE)
+
+from functools import partial
+# Pythonic
+with open('test.json') as f:
+    for piece in iter(partial(f.read, CHUNK_SIZE), ''):
+        print (piece)
+# Lambda
+with open('test.json') as f:
+    for piece in iter(lambda: f.read(CHUNK_SIZE), ''):
+        print (piece)
+</code></pre>
+
+<p>for-else和try-else语法</p>
+
+<pre><code class="language-python">is_for_finished = True
+
+try:
+    for item in array:
+        print (item)
+        # raise Exception
+except:
+    is_for_finished = False
+
+if is_for_finished is True:
+    print ('complete')
+    
+# Pythonic
+for item in array:
+    print (item)
+    # raise Exception
+else:
+    print ('complete')
+
+try:
+    print ('try')
+    # raise Exception
+except Exception:
+    print ('exception')
+else:
+    print ('complete')
+</code></pre>
+
+<p>函数参数解压</p>
+
+<pre><code class="language-python">def draw_point(x, y):
+    # do some magic
+
+point_foo = (3, 4)
+point_bar = {'y': 3, 'x': 2}
+
+draw_point(*point_foo)
+draw_point(**point_bar)
+</code></pre>
+
+<p>列表/元组解压</p>
+
+<pre><code class="language-python">first, second, *rest = (1,2,3,4,5,6,7,8)
+</code></pre>
+
+<p>&ldquo;Print To&rdquo;语法</p>
+
+<pre><code class="language-python"># 2.x
+print &gt;&gt;  open(&quot;myfile&quot;, &quot;w&quot;), &quot;hello world&quot;
+# 3.x
+print (&quot;hello world&quot;, file=open(&quot;myfile&quot;, &quot;w&quot;))
+</code></pre>
+
+<p>字典缺省值</p>
+
+<pre><code class="language-python">d = {}
+
+try:
+    d['count'] = d['count'] + 1
+except KeyError:
+    d['count'] = 0
+# Pythonic
+d['count'] = d.get('count', 0) + 1
+</code></pre>
+
+<p>链式比较符</p>
+
+<pre><code class="language-python">if x &lt; 100 and x &gt; 0:
+    print(x)
+# Pythonic
+if 0 &lt; x &lt; 100:
+    print(x)
+</code></pre>
+
+<p>多行字符串</p>
+
+<pre><code class="language-python">s = (&quot;longlongstringiii&quot;
+    &quot;iiiiiiiii&quot;
+    &quot;iiiiiii&quot;)
+
+print(s)
+</code></pre>
+
+<p>in表达式</p>
+
+<pre><code class="language-python">if 'string'.find('ring') &gt; 0:
+    print ('find')
+# Pythonic
+if 'ring' in 'string':
+    print ('find')
+
+for r in ['ring', 'ring1', 'ring2']:
+    if r == 'ring':
+        print ('find')
+# Pythonic
+if 'ring' in ['ring', 'ring1', 'ring2']:
+    print('find')
+</code></pre>
+
+<p>字符串连接</p>
+
+<pre><code class="language-python">array = ['a', 'b', 'c', 'd', 'e']
+s = array[0]
+for char in array[1:]:
+    s += ',' + char
+# Pythonic
+s = ','.join(array)
+</code></pre>
+
+<p>列表合并字典</p>
+
+<pre><code class="language-python">keys = ['a', 'b', 'c']
+values = [1, 2, 3]
+
+d = {}
+for key, value in zip(keys, values):
+    d[key] = value
+# Better
+d = dict(zip(keys, values))
+# Pythonic
+d = {key: value for key, value in zip(keys, values)}
+</code></pre>
+
+<p>all和any</p>
+
+<pre><code class="language-python">flag = True
+for cond in conditions:
+    if cond is False:
+        flag = False
+        break
+# Pythonic
+flag = all(conditions)
+
+flag = False
+for cond in conditions:
+    if cond is True:
+        flag = True
+        break
+# Pythonic
+flag = any(conditions)
+</code></pre>
+
+<p>or</p>
+
+<pre><code class="language-python">not_null_string = '' or 'string1' or 'string2'
+# string1
+</code></pre>
+
+<p>方法提取</p>
+
+<pre><code class="language-python">for item in ['b', 'c']:
+    array.append(item)
+# Faster
+append = array.append
+for item in ['b', 'c']:
+    append(item)
+</code></pre>
+
+<p>单例模式</p>
+
+<pre><code class="language-python">from [module] import [single_instance]
+</code></pre>
+
+<p>让python的语法像ruby一样</p>
+
+<pre><code class="language-python">__builtins__.end = None
+
+def ruby_like_func(x):
+    print(x)
+end
+</code></pre>
+
+<p>用&lt;&gt;代替!=</p>
+
+<pre><code class="language-python">In [1]: from __future__ import barry_as_FLUFL
+
+In [2]: 1 == 1
+Out[2]: True
+
+In [3]: 1 != 1
+  File &quot;&lt;ipython-input-3-1ec724d2c3b1&gt;&quot;, line 1
+    1 != 1
+       ^
+SyntaxError: invalid syntax
+
+
+In [4]: 1 &lt;&gt; 1
+Out[4]: False
+</code></pre>
+
+<p>性能排查</p>
+
+<pre><code>python -m cProfile test.py
+</code></pre>
+
+<p>格式化一个json文件</p>
+
+<pre><code>python -m json.tool test.json
+echo '{&quot;json&quot;:&quot;obj&quot;}' | python -m json.tool # 管道
+</code></pre>
+
+<p>开启本地目录的HTTP服务器</p>
+
+<pre><code>python2 -m SimpleHTTPServer 8080 # 2.x
+python3 -m http.server 8080 # 3.x
+</code></pre>
+
+<p>在Python使用花括号块</p>
+
+<pre><code class="language-python">from __future__ import braces
+</code></pre>
+
+<p>Python之禅</p>
+
+<pre><code>In [1]: import this
+The Zen of Python, by Tim Peters
+
+Beautiful is better than ugly.
+Explicit is better than implicit.
+Simple is better than complex.
+Complex is better than complicated.
+Flat is better than nested.
+Sparse is better than dense.
+Readability counts.
+Special cases aren't special enough to break the rules.
+Although practicality beats purity.
+Errors should never pass silently.
+Unless explicitly silenced.
+In the face of ambiguity, refuse the temptation to guess.
+There should be one-- and preferably only one --obvious way to do it.
+Although that way may not be obvious at first unless you're Dutch.
+Now is better than never.
+Although never is often better than *right* now.
+If the implementation is hard to explain, it's a bad idea.
+If the implementation is easy to explain, it may be a good idea.
+Namespaces are one honking great idea -- let's do more of those!
+</code></pre>
+
+<p>antigravity</p>
+
+<pre><code class="language-python">import antigravity
+</code></pre>
+
+                </section>
+            </article>
+
+            
+
+            
+
+            
+
+            <footer id="footer">
+    
+    <p class="small">
+    
+       © Copyright 2018 <i class="fa fa-heart" aria-hidden="true"></i> 
+    
+    </p>
+    <p class="small">
+        Powered by <a href="http://www.gohugo.io/">Hugo</a> Theme By <a href="https://github.com/nodejh/hugo-theme-cactus-plus">nodejh</a>
+    </p>
+</footer>
+
+        </section>
+
+        <script src="http://4fish.xyz/js/jquery-3.3.1.min.js"></script>
+<script src="http://4fish.xyz/js/main.js"></script>
+<script src="http://4fish.xyz/js/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+  
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-117516487-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+
+
+
+    </body>
+</html>

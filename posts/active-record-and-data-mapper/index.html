@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		
+		
+		<meta name="generator" content="Hugo 0.26" />
+		<title>Active Record和Data Mapper &middot; 4 Fish</title>
+		<link rel="shortcut icon" href="http://4fish.xyz/images/favicon.ico">
+		<link rel="stylesheet" href="http://4fish.xyz/css/style.css">
+		<link rel="stylesheet" href="http://4fish.xyz/css/highlight.css">
+
+		
+		<link rel="stylesheet" href="http://4fish.xyz/css/monosocialiconsfont.css">
+		
+
+		
+		<link href="http://4fish.xyz/index.xml" rel="alternate" type="application/rss+xml" title="4 Fish" />
+		
+
+		
+	</head>
+
+    <body>
+       <nav class="main-nav">
+	
+	
+		<a href='http://4fish.xyz/'> <span class="arrow">←</span>Home</a>
+	
+	<a href='http://4fish.xyz/posts'>Archive</a>
+	<a href='http://4fish.xyz/tags'>Tags</a>
+	<a href='http://4fish.xyz/about'>About</a>
+
+	
+
+	
+	<a class="cta" href="http://4fish.xyz/index.xml">Subscribe</a>
+	
+</nav>
+
+
+        <section id="wrapper" class="post">
+            <article>
+                <header>
+                    <h1>
+                        Active Record和Data Mapper
+                    </h1>
+                    <h2 class="headline">
+                    Mar 15, 2017 00:00
+                    · 1166 words
+                    · 3 minute read
+                      <span class="tags">
+                      
+                      
+                          
+                              <a href="http://4fish.xyz/tags/design">design</a>
+                          
+                      
+                      
+                      </span>
+                    </h2>
+                </header>
+                
+                <section id="post-body">
+                    
+
+<h1 id="概念">概念</h1>
+
+<p>在《企业领域架构模式》中，Martin Flower提出架构模式要解决的问题是驱动领域逻辑访问数据库的方式，尽管SQL在当今已广泛应用，但它在使用中还是存在一些缺陷，许多开发者不能充分理解SQL，尽管现在有许多技术可以把SQL潜入在高级程序语言中，但它们或多或少都有一些笨拙。基于这些原因，把SQL从领域逻辑中分离出来，放到其他的类中。有一种方法可以很好地组织这些类：一个数据库表对应一个类，这些类为数据库表建立一个入口。</p>
+
+<p>如果使用领域模型，还会有更多的选择。在简单应用中，领域模型是一种和数据库结构一致的简单结构，对应每个数据库表都有一个领域类，在这种情况下，有必要让每个对象负责数据库的存取过程，这也就是<code>Active Record（活动记录）</code>。</p>
+
+<p>领域对象直接鱼数据库表进行交互，这带来了一个问题，随着领域逻辑变的更加复杂，它就慢慢转变成一个大的领域模型，简单的Active Record已经不能满足要求了，领域类和表一对一匹配也开始随着把领域逻辑放入更小的类而失效。关系数据库无法处理继承，因此使用策略模式等面相对象模式非常困难。</p>
+
+<p>一种更好的办法是把数据库和数据库完全独立，让间接层完全领域对象和数据库表之间的映射，这个映射类也称作<code>Data Mapper（数据映射器）</code>。这个映射类处理数据库和领域模型之间所有的存取操作，并且允许双方都能独立变化。</p>
+
+<p>如果领域逻辑非常简单并且类和表十分一致，使用简单的Active Record就足够了。如果领域逻辑比较复杂，Data Mapper则可能是需要的。</p>
+
+<h1 id="orm中的active-record和data-mapper">ORM中的Active Record和Data Mapper</h1>
+
+<p>Ruby和Laravel的ORM都采取了Active Record的模式，因此它们ORM可能像下面这样：</p>
+
+<pre><code> $user = new User;
+$user-&gt;username = 'philipbrown';
+$user-&gt;save();
+</code></pre>
+
+<p>领域对象直接对应着数据库中的一个表：</p>
+
+<pre><code>+----+-------------+
+| id | username    |
++----+-------------+
+| 1  | philipbrown |
++----+-------------+
+</code></pre>
+
+<p>我们再来看使用Data Mapper的ORM是怎样的：</p>
+
+<pre><code>$user = new User;
+$user-&gt;username = 'philipbrown';
+EntityManager::persist($user);
+</code></pre>
+
+<p>现在我们察看到了它们最基本的区别：在Active Record中，领域对象有一个save()方法，领域对象通常会继承一个ActiveRecord的基类来实现。而在Data Mapper模式中，领域对象<strong>不存在</strong>save()方法，持久化操作由一个中间类来实现。</p>
+
+<h1 id="结构映射">结构映射</h1>
+
+<h2 id="关系映射">关系映射</h2>
+
+<p>在ORM中，通常还要关注关系映射的问题，譬如回到上面的例子，一个User可能有一些Post，而且它们往往在其他的表中，这就需要处理跨表的映射关系。</p>
+
+<pre><code>$posts = $user-&gt;posts;
+</code></pre>
+
+<pre><code>+----+---------+-------+
+| id | user_id | title |
++----+---------+-------+
+| 1  | 2       | &quot;...&quot; |
++----+---------+-------+
+</code></pre>
+
+<p>就上面这种一对多的关系来说，我们可以通过对象中的一个标识域来保持对象之间的关系特性，这种标识域在数据表中直接的体现就是外键，通过外键来得到对象间的引用。</p>
+
+<p>而在多对多的关系中，因为两边都存在着集合，就用学生－课程来说，一个学生可能有多门课程，而一个课程可能被多个学生选择，这个时候，用一个关联对象抽取出原来的外键则是更好的选择，这种关联对象在数据库中扮演着一个<strong>关联表</strong>。</p>
+
+<h2 id="继承">继承</h2>
+
+<p>在SQL里没有用于继承的标准方法，所以处理领域对象的继承时要十分留意，对于任何继承结构一般有三种选择：<strong>单表继承</strong>：为一个层次所有的类建立一个表，<strong>具体表继承</strong>：为每个具体类建立一个表，<strong>类表继承</strong>：为这个层次的每一个类建立一个表。</p>
+
+                </section>
+            </article>
+
+            
+
+            
+
+            
+
+            <footer id="footer">
+    
+    <p class="small">
+    
+       © Copyright 2018 <i class="fa fa-heart" aria-hidden="true"></i> 
+    
+    </p>
+    <p class="small">
+        Powered by <a href="http://www.gohugo.io/">Hugo</a> Theme By <a href="https://github.com/nodejh/hugo-theme-cactus-plus">nodejh</a>
+    </p>
+</footer>
+
+        </section>
+
+        <script src="http://4fish.xyz/js/jquery-3.3.1.min.js"></script>
+<script src="http://4fish.xyz/js/main.js"></script>
+<script src="http://4fish.xyz/js/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+  
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-117516487-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+
+
+
+    </body>
+</html>
