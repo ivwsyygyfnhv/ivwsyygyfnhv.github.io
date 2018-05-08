@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>读书笔记 on 4 Fish</title>
+    <link>http://4fish.xyz/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/</link>
+    <description>Recent content in 读书笔记 on 4 Fish</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Tue, 08 May 2018 22:18:55 +0800</lastBuildDate>
+    
+	<atom:link href="http://4fish.xyz/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>《think os》笔记</title>
+      <link>http://4fish.xyz/posts/think-os-note/</link>
+      <pubDate>Tue, 08 May 2018 22:18:55 +0800</pubDate>
+      
+      <guid>http://4fish.xyz/posts/think-os-note/</guid>
+      <description>第一章：编译 编译型语言和解释型语言 编译过程 1.预处理 2.解析 3.静态检查 4.生成机器/字节码 5.链接 6.优化 第二章：进程 进程：正在运行的程序</description>
+    </item>
+    
+    <item>
+      <title>《DDIA》笔记</title>
+      <link>http://4fish.xyz/posts/ddia-note/</link>
+      <pubDate>Wed, 25 Apr 2018 21:00:09 +0800</pubDate>
+      
+      <guid>http://4fish.xyz/posts/ddia-note/</guid>
+      <description>第一章：可靠性，可扩展性，可维护性 许多应用程序都需要：数据库，缓存，搜索索引，流处理，批处理。 三个软件系统中的重要问题：可靠性（在困境中仍能</description>
+    </item>
+    
+  </channel>
+</rss>
