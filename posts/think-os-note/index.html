@@ -7,8 +7,8 @@
 		
 		
 		
-		<meta name="generator" content="Hugo 0.26" />
-		<title>《think os》笔记 &middot; 4 Fish</title>
+		<meta name="generator" content="Hugo 0.40.2" />
+		<title>操作系统笔记 &middot; 4 Fish</title>
 		<link rel="shortcut icon" href="http://4fish.xyz/images/favicon.ico">
 		<link rel="stylesheet" href="http://4fish.xyz/css/style.css">
 		<link rel="stylesheet" href="http://4fish.xyz/css/highlight.css">
@@ -46,12 +46,12 @@
             <article>
                 <header>
                     <h1>
-                        《think os》笔记
+                        操作系统笔记
                     </h1>
                     <h2 class="headline">
                     May 8, 2018 22:18
-                    · 1912 words
-                    · 4 minute read
+                    · 5545 words
+                    · 12 minute read
                       <span class="tags">
                       
                       
@@ -68,6 +68,8 @@
                 
                 <section id="post-body">
                     
+
+<p>《Think os》</p>
 
 <h2 id="第一章-编译">第一章：编译</h2>
 
@@ -230,6 +232,347 @@ printf (&quot;s points to %p\n&quot;, s);
 <ul>
 <li>同一进程中的所有线程共享相同的代码段，static段，堆，但每个线程拥有属于自己的栈，线程不能访问其它线程的局部变量。</li>
 </ul>
+
+<hr />
+
+<p>《现代操作系统》</p>
+
+<h1 id="进程">进程</h1>
+
+<p>进程：正在运行的一个程序的实例，由一个内核对象和一个地址空间构成。</p>
+
+<p><strong>程序与进程区别</strong></p>
+
+<ul>
+<li>进程是程序执行,程序是进程的基础;</li>
+<li>程序是静态的,进程是动态的;</li>
+<li>进程与程序不是一一对应的关系;</li>
+<li>一个程序可能启动多次,对应着多个进程。</li>
+<li>一个进程可能会打开多个程序。</li>
+<li>进程有生命期;</li>
+<li>进程的并发性;</li>
+<li>进程的制约性。</li>
+</ul>
+
+<p><strong>进程状态</strong>： 就绪，阻塞，运行。</p>
+
+<p><strong>进程的组成</strong>: 程序、数据集合和PCB</p>
+
+<p><strong>需要线程的原因</strong>:</p>
+
+<ul>
+<li>并发实体共享同一个地址空间和所有可 用数据的能力。(进程做不倒)</li>
+<li>比进程更容易创建和撤消。</li>
+<li>如果存在大量的计算和大量I/O处理,多线程加快应用执行的速度。</li>
+</ul>
+
+<p><strong>线程组成</strong>：堆栈，寄存器，程序计数器和状态。共享进程的地址空间，打开的文件和其他资源。</p>
+
+<p><strong>两种线程模型</strong>：</p>
+
+<ul>
+<li><strong>用户空间线程模型</strong>：每个进程有各自的线程表，内核不知道线程表的存在。优点：可在不支持线程的操作系统实现。在用户空间可实现自定义的线程调度算法，不需要上下文切换。缺点：线程调用阻塞系统调用，由于内核不知道线程的存在，从而阻塞整个进程和其他线程。没有时钟中断，除非线程让出cpu，否则进程里的其他线程在时间片用完前得不到调度。</li>
+<li><strong>内核空间线程模型</strong>：由内核来维护一张所有线程的线程表。优点：一个线程阻塞时，内核可以调度就绪的其他线程。缺点：创建线程的代价大（因此可能需要线程回收）。</li>
+</ul>
+
+<p><strong>进程间通信（IPC)</strong></p>
+
+<ul>
+<li><strong>竞争条件</strong>(race condition)：两个或多个进程读写某些共享数据,而最后的结果取决于精确时序。</li>
+<li><strong>临界区</strong>：访问共享内存和数据的一段程序。</li>
+<li><strong>互斥</strong>：以某种手段确保当一个进程在使用一个共享变量、文件及共享任何资 源时,其他进程不能做同样的操作。</li>
+<li><strong>睡眠和唤醒</strong>：sleep和wake。</li>
+<li><strong>信号量</strong></li>
+<li><strong>互斥量</strong>：pthread_mutex</li>
+<li><strong>条件变量</strong>：pthread_cond(常于mutex一起使用)</li>
+<li><strong>管程</strong></li>
+<li><strong>消息传递</strong></li>
+<li><strong>屏障</strong></li>
+</ul>
+
+<p><strong>忙等待的互斥方案</strong></p>
+
+<ul>
+<li><strong>屏蔽中断</strong>：在进程进出临界区间的时间里屏蔽所有中断，使其他进程无法进入临界区。缺点：无法适应多核问题。</li>
+<li><strong>锁变量</strong>：使用变量锁来检查。缺点：多进程可能同时测试锁的值，仍然可能同时进入临界区。</li>
+<li><strong>严格轮换</strong></li>
+<li><strong>Peterson解法</strong></li>
+<li><strong>TSL指令</strong></li>
+</ul>
+
+<p><strong>进程调度</strong></p>
+
+<ul>
+<li>非抢占式调度算法</li>
+<li>抢占式调度算法</li>
+</ul>
+
+<p><strong>调度算法</strong></p>
+
+<ul>
+<li><strong>先来先服务</strong>(First-Come First-Served)(FCFS)
+
+<ul>
+<li>非抢占;链表维护排队队列。批处理系统。</li>
+</ul></li>
+<li><strong>最短作业优先</strong>(Shortest Job First)
+
+<ul>
+<li>非抢占;需可预测执行时间。批处理系统</li>
+<li>4个作业平均周转时间=(4a+3b+2c+d)/4, 平均周转时间最小</li>
+</ul></li>
+<li><strong>最短剩余时间优先</strong>(Shortest remaining time First)
+
+<ul>
+<li>最短作业优先的抢占式。批处理系统</li>
+<li>当新作业到达时,其执行时间与当前运行进程的剩余时间进行比较,短的优先执行。</li>
+</ul></li>
+<li><strong>轮转调度</strong>(Round-Robin Scheduling)
+
+<ul>
+<li>时间片(quantum)通常20-50ms。抢占式。交互系统。</li>
+<li>进程切换(process swithc),上下文切换(context swith)</li>
+</ul></li>
+<li><strong>优先级调度</strong>(Priority Scheduling)
+
+<ul>
+<li>设置优先级并可降低。同级别的进程采用轮转。</li>
+<li>低级别可能饿死 I/O密集的进程可设置较高优先级。</li>
+</ul></li>
+<li><strong>多级队列</strong>(Multiple Queue)
+
+<ul>
+<li>最高优先级类运行1时间片,次高运行2时间片,再次高运行4时间片,依些类推。当完成分配的时间片后,它被移到下一类。</li>
+</ul></li>
+<li><strong>最短进程优先</strong>(Shortest Process Nest)(SPN)
+
+<ul>
+<li>相当于 “最短作业优先”</li>
+</ul></li>
+<li><strong>最高响应比优先</strong>
+
+<ul>
+<li>非抢占式响应比=(等待时间)/(所需CPU时间)</li>
+</ul></li>
+</ul>
+
+<p><strong>经典IPC问题</strong></p>
+
+<p><strong>哲学家就餐</strong></p>
+
+<p><strong>死锁</strong></p>
+
+<p><strong>原因</strong>:</p>
+
+<ul>
+<li>竞争资源</li>
+<li>程序推进顺序不当</li>
+</ul>
+
+<p><strong>必要条件</strong>:</p>
+
+<ul>
+<li>互斥条件</li>
+<li>请求和保持条件</li>
+<li>不剥夺条件</li>
+<li>环路等待条件</li>
+</ul>
+
+<p><strong>处理死锁基本方法</strong>:</p>
+
+<ul>
+<li>预防死锁(摒弃除1以外的条件)</li>
+<li>避免死锁(银行家算法)</li>
+<li>检测死锁(资源分配图)</li>
+<li>解除死锁</li>
+<li>剥夺资源</li>
+<li>撤销进程</li>
+</ul>
+
+<h1 id="程序编译与链接">程序编译与链接</h1>
+
+<p>Bulid过程可以分解为4个步骤:预处理(Prepressing), 编译(Compilation)、汇编(Assembly)、链接(Linking)</p>
+
+<p>以c语言为例:</p>
+
+<p>1 预处理</p>
+
+<p>预编译过程主要处理那些源文件中的以“#”开始的预编译指令，主要处理规则有：</p>
+
+<p>将所有的“#define”删除，并展开所用的宏定义
+处理所有条件预编译指令，比如“#if”、“#ifdef”、 “#elif”、“#endif”
+处理“#include”预编译指令，将被包含的文件插入到该编译指令的位置，注：此过程是递归进行的
+删除所有注释
+添加行号和文件名标识，以便于编译时编译器产生调试用的行号信息以及用于编译时产生编译错误或警告时可显示行号
+保留所有的#pragma编译器指令。
+2 编译</p>
+
+<p>编译过程就是把预处理完的文件进行一系列的词法分析、语法分析、语义分析及优化后生成相应的汇编代码文件。这个过程是整个程序构建的核心部分。</p>
+
+<p>3 汇编</p>
+
+<p>汇编器是将汇编代码转化成机器可以执行的指令，每一条汇编语句几乎都是一条机器指令。经过编译、链接、汇编输出的文件成为目标文件(Object File)</p>
+
+<p>4 链接</p>
+
+<p>链接的主要内容就是把各个模块之间相互引用的部分处理好，使各个模块可以正确的拼接。 链接的主要过程包块 地址和空间的分配（Address and Storage Allocation）、符号决议(Symbol Resolution)和重定位(Relocation)等步骤。</p>
+
+<h1 id="存储管理">存储管理</h1>
+
+<p><strong>分层存储体系</strong></p>
+
+<ul>
+<li>寄存器（1ns）</li>
+<li>高速缓存（2ns）</li>
+<li>主存（10ns）</li>
+<li>磁盘（10ms）</li>
+<li>磁带（100s）</li>
+</ul>
+
+<p><strong>存储管理的任务</strong></p>
+
+<ul>
+<li>记录存储器的使用情况,即哪些部分正被使用,哪些部分还空闲着。</li>
+<li>当进程需要存储空间时,就分配给它; 然后当它运行结束后,再把存储空间回 收回来。</li>
+<li>如果内存太小,容不下所有的进程,那 么就需要把内存中暂时不能运行的进程 转到磁盘上,然后再把磁盘上的另一个 进程装入内存。</li>
+<li>大多数的操作系统中,存储管理位于内核之中。</li>
+</ul>
+
+<p><strong>内存管理的五点需求</strong></p>
+
+<ol>
+<li>重定位</li>
+<li>保护</li>
+<li>共享</li>
+<li>逻辑组织</li>
+<li>物理组织</li>
+</ol>
+
+<p><strong>六种内存管理技术</strong></p>
+
+<ul>
+<li>固定分区</li>
+<li>动态分区</li>
+<li>简单分页</li>
+<li>简单分段</li>
+<li>虚拟内存分页</li>
+<li>虚拟内存分段</li>
+</ul>
+
+<p><strong>虚拟存储技术</strong>就是利用实际内存空间和相对大的多的外部储存器存储空间相结合构成一个远远大于实际内存空间的虚拟存储空间，程序就运行在这个虚拟存储空间中，能够实现虚拟存储的依据是程序的局部性原理，即程序在运行过程中经常体现出运行在某个局部范围之内的特点。</p>
+
+<table>
+<thead>
+<tr>
+<th>技术</th>
+<th align="center">说明</th>
+<th align="center">优势</th>
+<th align="center">弱点</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>固定分区</td>
+<td align="center">在系统生成阶段,主存被划分成许多静态分区 进程可以装入到大于或等于自身大小的分区中</td>
+<td align="center">实现简单,只需要极少的操作 系统开销</td>
+<td align="center">由于有内部碎片,对内存的使 用不充分;活动进程的最数目 是固定的。</td>
+</tr>
+
+<tr>
+<td>动态分区</td>
+<td align="center">分区是动态创建的,因而使得每个进程可以装 入到与自身大小正好相等的分区中。</td>
+<td align="center">没有内部碎片;可以更充分地 使用主存。</td>
+<td align="center">由于需要压缩外部碎片,对内 存的使用不充分。</td>
+</tr>
+
+<tr>
+<td>简单分页</td>
+<td align="center">主存被划分成许多大小相等的帧;每个进程被 划分成许多大小与帧相等的页;要装入一个进 程,需要把进程包含的所有页都装入到主存内 不一定连续的某些帧中。</td>
+<td align="center">没有外部碎片</td>
+<td align="center">有很少数量的内部碎片</td>
+</tr>
+
+<tr>
+<td>简单分段</td>
+<td align="center">每个进程被划分成许多段;要装入一个进程, 需要把进程包含的所有段都装入到主存内不一 定连续的某些动态分区中。</td>
+<td align="center">没有内部碎片;相对于动态分 区,提高了内存利用率,减少 了开销。</td>
+<td align="center">存在外部碎片。</td>
+</tr>
+
+<tr>
+<td>虚拟内存分页</td>
+<td align="center">除了不需要装入一个进程的所有页之外,与简 单分页一样;非驻留页在以后需要时自动调入 空间。</td>
+<td align="center">没有外部碎片;更高程序的多 道程序设计;巨大的虚拟地址 空间。</td>
+<td align="center">复杂的内存管理开销。</td>
+</tr>
+
+<tr>
+<td>虚拟内存分段</td>
+<td align="center">除了不需要装入一个进程的所有段之外,与简 单分页一样;非驻留段在以后需要时自动调入 空间。</td>
+<td align="center">没有内部碎片;更高程序的多 道程序设计;巨大的虚拟地址 空间;支持保护和共享</td>
+<td align="center">复杂的内存管理开销。</td>
+</tr>
+</tbody>
+</table>
+
+<p><strong>动态分区放置算法</strong></p>
+
+<ul>
+<li>首次适配</li>
+<li>最佳适配</li>
+<li>邻近适配(假定最近添加的块位于内存的开始)</li>
+<li>最坏适配</li>
+</ul>
+
+<p><strong>分页式地址重定位</strong></p>
+
+<p>计算公式</p>
+
+<ul>
+<li>页号=相对地址\块尺寸</li>
+<li>页内位移=相对地址%块尺寸</li>
+</ul>
+
+<p><strong>流程</strong></p>
+
+<ol>
+<li>将相对地址转换成数对(页号,页内位移)</li>
+<li>建立一张作业的页与块对应表</li>
+<li>按页号去查页、块对应表</li>
+<li>由块的起始地址与页内位移形成绝对地址</li>
+</ol>
+
+<p>页表是一种特殊的数据结构，放在系统空间的页表区，存放逻辑页与物理页帧的对应关系。 每一个进程都拥有一个自己的页表，PCB表中有指针指向页表。</p>
+
+<p><strong>实现虚拟分页需要考虑的问题</strong></p>
+
+<ul>
+<li>虚拟地址到物理地址的映射必须快</li>
+<li>如果虚拟地址空间很大,页表会很大</li>
+</ul>
+
+<p>TLB(Translation Lookaside Buffer),简称快表，加速虚拟地址到物理地址的映射。通常在MMU中。</p>
+
+<p><strong>依据</strong></p>
+
+<p>总是对少量的页面进行多次的 访问。因此,只有很少的页表 项会被反复读取,而其他的页 表项很少被访问。</p>
+
+<p><strong>页面淘汰算法</strong></p>
+
+<ul>
+<li><strong>最佳</strong>(OPT) Optimal 替换下次访问距当前最长的页。</li>
+<li><strong>最近最少使用</strong>(LRU) Least Recently Used 置换未使用时间最长的页面。(替换主存中上次使用距当前最远的页。)</li>
+<li><strong>最不常用算法</strong>(NFU) Not Frequently Used</li>
+<li><strong>老化</strong>(aging)算法</li>
+<li><strong>先进先出</strong>(FIFO) First In First Out 由操作系统维护一个所有当 前在内存中的页面的链表,最新进入的页面放在表 尾,最久进入的页面放在表头。</li>
+<li><strong>时钟</strong>(Clock)</li>
+<li><strong>最近未使用</strong>(NRU)</li>
+</ul>
+
+<p><strong>缺页中断</strong></p>
+
+<p>在地址映射过程中，若在页面中发现所要访问的页面不在内存中，则产生缺页中断。当发生缺页中断时，如果操作系统内存中没有空闲页面，则操作系统必须在内存选择一个页面将其移出内存，以便为即将调入的页面让出空间。而用来选择淘汰哪一页的规则叫做页面置换算法。</p>
 
                 </section>
             </article>

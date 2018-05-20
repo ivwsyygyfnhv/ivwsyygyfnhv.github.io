@@ -12,12 +12,12 @@
     
     
     <item>
-      <title>《think os》笔记</title>
+      <title>操作系统笔记</title>
       <link>http://4fish.xyz/posts/think-os-note/</link>
       <pubDate>Tue, 08 May 2018 22:18:55 +0800</pubDate>
       
       <guid>http://4fish.xyz/posts/think-os-note/</guid>
-      <description>第一章：编译 编译型语言和解释型语言 编译过程 1.预处理 2.解析 3.静态检查 4.生成机器/字节码 5.链接 6.优化 第二章：进程 进程：正在运行的程序</description>
+      <description>《Think os》 第一章：编译 编译型语言和解释型语言 编译过程 1.预处理 2.解析 3.静态检查 4.生成机器/字节码 5.链接 6.优化 第二章：进程 进</description>
     </item>
     
     <item>
