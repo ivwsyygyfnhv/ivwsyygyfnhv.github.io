@@ -6,10 +6,19 @@
     <description>Recent content in Python on 4 Fish</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Tue, 01 May 2018 22:15:31 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 27 Jun 2018 16:33:17 +0800</lastBuildDate>
     
 	<atom:link href="http://4fish.xyz/tags/python/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Python Asyncio与多线程/多进程那些事</title>
+      <link>http://4fish.xyz/posts/asyncio-concurrency/</link>
+      <pubDate>Wed, 27 Jun 2018 16:33:17 +0800</pubDate>
+      
+      <guid>http://4fish.xyz/posts/asyncio-concurrency/</guid>
+      <description>根据asyncio的文档介绍，asyncio的事件循环不是线程安全的，一个event loop只能在一个线程内调度和执行任务，并且同一时间只有</description>
+    </item>
     
     <item>
       <title>python logging模块的死锁问题</title>

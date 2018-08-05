@@ -21,6 +21,15 @@
     </item>
     
     <item>
+      <title>Python Asyncio与多线程/多进程那些事</title>
+      <link>http://4fish.xyz/posts/asyncio-concurrency/</link>
+      <pubDate>Wed, 27 Jun 2018 16:33:17 +0800</pubDate>
+      
+      <guid>http://4fish.xyz/posts/asyncio-concurrency/</guid>
+      <description>根据asyncio的文档介绍，asyncio的事件循环不是线程安全的，一个event loop只能在一个线程内调度和执行任务，并且同一时间只有</description>
+    </item>
+    
+    <item>
       <title>操作系统笔记</title>
       <link>http://4fish.xyz/posts/think-os-note/</link>
       <pubDate>Tue, 08 May 2018 22:18:55 +0800</pubDate>
