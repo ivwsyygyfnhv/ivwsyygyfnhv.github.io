@@ -6,10 +6,19 @@
     <description>Recent content on 4 Fish</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Sat, 04 Aug 2018 10:18:55 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 23 Oct 2018 00:00:00 +0800</lastBuildDate>
     
 	<atom:link href="http://4fish.xyz/categories/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>实现连接池的几种姿势</title>
+      <link>http://4fish.xyz/posts/go-connection-pool/</link>
+      <pubDate>Tue, 23 Oct 2018 00:00:00 +0800</pubDate>
+      
+      <guid>http://4fish.xyz/posts/go-connection-pool/</guid>
+      <description>连接池是一个用来维护可复用连接的数据结构，正确地使用连接池可以达到减少网络往返损耗，降低系统资源占用，提升响应性能的目的。连接池主要的思想是</description>
+    </item>
     
     <item>
       <title>数据库索引笔记</title>
