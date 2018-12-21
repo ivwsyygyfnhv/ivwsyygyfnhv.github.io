@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Go on 4 Fish</title>
-    <link>http://4fish.xyz/tags/go/</link>
-    <description>Recent content in Go on 4 Fish</description>
+    <title>Mit6.824 on 4 Fish</title>
+    <link>http://4fish.xyz/tags/mit6.824/</link>
+    <description>Recent content in Mit6.824 on 4 Fish</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <lastBuildDate>Wed, 12 Dec 2018 00:00:00 +0800</lastBuildDate>
     
-	<atom:link href="http://4fish.xyz/tags/go/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="http://4fish.xyz/tags/mit6.824/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -18,15 +18,6 @@
       
       <guid>http://4fish.xyz/posts/map-reduce/</guid>
       <description>什么是MapReduce MapReduce是一种用以处理和生成大数据集的编程模型，其中用户指定map函数和reduce函数，它们分别用以把一</description>
-    </item>
-    
-    <item>
-      <title>实现连接池的几种姿势</title>
-      <link>http://4fish.xyz/posts/go-connection-pool/</link>
-      <pubDate>Tue, 23 Oct 2018 00:00:00 +0800</pubDate>
-      
-      <guid>http://4fish.xyz/posts/go-connection-pool/</guid>
-      <description>连接池是一个用来维护可复用连接的数据结构，正确地使用连接池可以达到减少网络往返损耗，降低系统资源占用，提升响应性能的目的。连接池主要的思想是</description>
     </item>
     
   </channel>

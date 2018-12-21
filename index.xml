@@ -6,10 +6,19 @@
     <description>Recent content on 4 Fish</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Tue, 23 Oct 2018 00:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 12 Dec 2018 00:00:00 +0800</lastBuildDate>
     
 	<atom:link href="http://4fish.xyz/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>MIT 6.824笔记 - MapReduce</title>
+      <link>http://4fish.xyz/posts/map-reduce/</link>
+      <pubDate>Wed, 12 Dec 2018 00:00:00 +0800</pubDate>
+      
+      <guid>http://4fish.xyz/posts/map-reduce/</guid>
+      <description>什么是MapReduce MapReduce是一种用以处理和生成大数据集的编程模型，其中用户指定map函数和reduce函数，它们分别用以把一</description>
+    </item>
     
     <item>
       <title>实现连接池的几种姿势</title>
