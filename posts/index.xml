@@ -6,10 +6,19 @@
     <description>Recent content in Posts on 4 Fish</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Wed, 12 Dec 2018 00:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Mon, 21 Jan 2019 14:08:13 +0800</lastBuildDate>
     
 	<atom:link href="http://4fish.xyz/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>raft-example学习笔记</title>
+      <link>http://4fish.xyz/posts/raft-example/</link>
+      <pubDate>Mon, 21 Jan 2019 14:08:13 +0800</pubDate>
+      
+      <guid>http://4fish.xyz/posts/raft-example/</guid>
+      <description>raft-example是etcd中raft库的一个实现示例，它包含了etcd raft库的基本用法，以及如何利用它来实现一个简单的支持HTT</description>
+    </item>
     
     <item>
       <title>MIT 6.824笔记 - MapReduce</title>

@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>http://4fish.xyz/posts/raft-example/</loc>
+    <lastmod>2019-01-21T14:08:13+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>http://4fish.xyz/posts/map-reduce/</loc>
     <lastmod>2018-12-12T00:00:00+08:00</lastmod>
   </url>
@@ -125,19 +130,19 @@
   
   <url>
     <loc>http://4fish.xyz/categories/</loc>
-    <lastmod>2018-12-12T00:00:00+08:00</lastmod>
+    <lastmod>2019-01-21T14:08:13+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>http://4fish.xyz/</loc>
-    <lastmod>2018-12-12T00:00:00+08:00</lastmod>
+    <lastmod>2019-01-21T14:08:13+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>http://4fish.xyz/categories/</loc>
-    <lastmod>2018-12-12T00:00:00+08:00</lastmod>
+    <lastmod>2019-01-21T14:08:13+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -185,13 +190,19 @@
   
   <url>
     <loc>http://4fish.xyz/posts/</loc>
-    <lastmod>2018-12-12T00:00:00+08:00</lastmod>
+    <lastmod>2019-01-21T14:08:13+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>http://4fish.xyz/tags/python/</loc>
     <lastmod>2018-06-27T16:33:17+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://4fish.xyz/tags/raft/</loc>
+    <lastmod>2019-01-21T14:08:13+08:00</lastmod>
     <priority>0</priority>
   </url>
   

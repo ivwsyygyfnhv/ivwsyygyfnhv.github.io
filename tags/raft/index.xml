@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Raft on 4 Fish</title>
+    <link>http://4fish.xyz/tags/raft/</link>
+    <description>Recent content in Raft on 4 Fish</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Mon, 21 Jan 2019 14:08:13 +0800</lastBuildDate>
+    
+	<atom:link href="http://4fish.xyz/tags/raft/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>raft-example学习笔记</title>
+      <link>http://4fish.xyz/posts/raft-example/</link>
+      <pubDate>Mon, 21 Jan 2019 14:08:13 +0800</pubDate>
+      
+      <guid>http://4fish.xyz/posts/raft-example/</guid>
+      <description>raft-example是etcd中raft库的一个实现示例，它包含了etcd raft库的基本用法，以及如何利用它来实现一个简单的支持HTT</description>
+    </item>
+    
+  </channel>
+</rss>
