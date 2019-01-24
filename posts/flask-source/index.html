@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		
+		
+		<meta name="generator" content="Hugo 0.44" />
+		<title>Flask源码阅读笔记 &middot; 4 Fish</title>
+		<link rel="shortcut icon" href="http://4fish.xyz/images/favicon.ico">
+		<link rel="stylesheet" href="http://4fish.xyz/css/style.css">
+		<link rel="stylesheet" href="http://4fish.xyz/css/highlight.css">
+
+		
+		<link rel="stylesheet" href="http://4fish.xyz/css/monosocialiconsfont.css">
+		
+
+		
+		<link href="http://4fish.xyz/index.xml" rel="alternate" type="application/rss+xml" title="4 Fish" />
+		
+
+		
+	</head>
+
+    <body>
+       <nav class="main-nav">
+	
+	
+		<a href='http://4fish.xyz/'> <span class="arrow">←</span>Home</a>
+	
+	<a href='http://4fish.xyz/posts'>Archive</a>
+	<a href='http://4fish.xyz/tags'>Tags</a>
+	<a href='http://4fish.xyz/about'>About</a>
+
+	
+
+	
+	<a class="cta" href="http://4fish.xyz/index.xml">Subscribe</a>
+	
+</nav>
+
+
+        <section id="wrapper" class="post">
+            <article>
+                <header>
+                    <h1>
+                        Flask源码阅读笔记
+                    </h1>
+                    <h2 class="headline">
+                    Dec 1, 2015 00:00
+                    · 4280 words
+                    · 9 minute read
+                      <span class="tags">
+                      
+                      
+                          
+                              <a href="http://4fish.xyz/tags/python">python</a>
+                          
+                      
+                      
+                      </span>
+                    </h2>
+                </header>
+                
+                <section id="post-body">
+                    <p>首先看一个来自官方的使用例子：</p>
+
+<pre><code class="language-Python">from flask import Flask
+app = Flask(__name__)
+
+@app.route(&quot;/&quot;)
+def hello():
+    return &quot;Hello World!&quot;
+
+if __name__ == &quot;__main__&quot;:
+    app.run()
+</code></pre>
+
+<p>那么这里面发生了什么呢？进入源码一探究竟。</p>
+
+<p>这是Flask的依赖的模块，可以看到Flask依赖了<code>Jinja2</code>以及<code>Werkzeug</code>，Flask中关于模板大部分是封装了<code>jinja template method</code>的一些通用方法，包括常用的<code>render_template</code>，<code>Werkzeug</code>是Python中一个关于WSGI协议的工具库，支撑了Flask这个框架的大多数功能，例如：请求（<code>Request</code>）和响应（<code>Response</code>）对象，<code>LocalStack</code>和<code>LocalProxy</code>则是使用了本地线程的代理对象，<code>Map</code>和<code>Rule</code>则负责了定义路由的模版规则和映射方法，<code>SecureCookie</code>则是<code>Session</code>对象要继承的父类，它包含了处理cookie的一些机制和方法。除此之外，还导入了一些中间件（<code>SharedDataMiddleware</code>），一些辅助函数（<code>create_environ</code>,<code>wrap_file</code>，<code>cached_property</code>），异常类（<code>HTTPException</code>,<code>InternalServerError</code>）等。</p>
+
+<pre><code class="language-python">//...
+from jinja2 import Environment, PackageLoader, FileSystemLoader
+from werkzeug import Request as RequestBase, Response as ResponseBase, \
+     LocalStack, LocalProxy, create_environ, SharedDataMiddleware, \
+     ImmutableDict, cached_property, wrap_file, Headers, \
+     import_string
+from werkzeug.routing import Map, Rule
+from werkzeug.exceptions import HTTPException, InternalServerError
+from werkzeug.contrib.securecookie import SecureCookie
+</code></pre>
+
+<p>首先看<code>Flask</code>类被初始化的时候做了什么事：</p>
+
+<ul>
+<li>初始化了一个<code>Config</code>对象，即应用使用的全局配置，它是一个<code>dict</code>对象，不过扩展了各种配置加载的方法（<code>from_envvar</code>,<code>from_pyfile</code>,<code>from_object</code>）。</li>
+<li>初始化了<code>view_functions</code>（注册所有的视图函数，如例子中的<code>hello</code>），初始化了<code>error_handlers</code>（它负责处理像<code>404</code>，<code>500</code>这类错误的跳转视图函数）。</li>
+<li>初始化了<code>before_request_funcs</code>和<code>after_request_funcs</code>，它们分别对应存储请求进入前和离开后调用的钩子函数的字典对象。</li>
+<li>初始化了<code>url_map</code>，它是Werkzeug中实现的<code>Map</code>类，负责做路由的映射。</li>
+<li>做了静态资源路径的配置以及<code>jinja</code>（一个模版引擎）的一些初始化工作。</li>
+</ul>
+
+<pre><code class="language-python">class Flask(_PackageBoundObject):
+    request_class = Request
+
+    response_class = Response
+
+    static_path = '/static'
+
+    debug = ConfigAttribute('DEBUG')
+
+    secret_key = ConfigAttribute('SECRET_KEY')
+
+    session_cookie_name = ConfigAttribute('SESSION_COOKIE_NAME')
+
+    permanent_session_lifetime = ConfigAttribute('PERMANENT_SESSION_LIFETIME')
+
+    use_x_sendfile = ConfigAttribute('USE_X_SENDFILE')
+
+    debug_log_format = (
+        '-' * 80 + '\n' +
+        '%(levelname)s in %(module)s, %(pathname)s:%(lineno)d]:\n' +
+        '%(message)s\n' +
+        '-' * 80
+    )
+
+    jinja_options = ImmutableDict(
+        autoescape=True,
+        extensions=['jinja2.ext.autoescape', 'jinja2.ext.with_']
+    )
+
+    default_config = ImmutableDict({
+        'DEBUG':                                False,
+        'SECRET_KEY':                           None,
+        'SESSION_COOKIE_NAME':                  'session',
+        'PERMANENT_SESSION_LIFETIME':           timedelta(days=31),
+        'USE_X_SENDFILE':                       False
+    })
+
+    def __init__(self, import_name):
+        _PackageBoundObject.__init__(self, import_name)
+
+        self.config = Config(self.root_path, self.default_config)
+        self.view_functions = {}
+        self.error_handlers = {}
+        self.before_request_funcs = {}
+        self.after_request_funcs = {}
+        self.template_context_processors = {
+            None: [_default_template_ctx_processor]
+        }
+
+        self.url_map = Map()
+
+        if self.static_path is not None:
+            self.add_url_rule(self.static_path + '/&lt;filename&gt;',
+                              build_only=True, endpoint='static')
+            if pkg_resources is not None:
+                target = (self.import_name, 'static')
+            else:
+                target = os.path.join(self.root_path, 'static')
+            self.wsgi_app = SharedDataMiddleware(self.wsgi_app, {
+                self.static_path: target
+            })
+
+        self.jinja_env = Environment(loader=self.create_jinja_loader(),
+                                     **self.jinja_options)
+        self.jinja_env.globals.update(
+            url_for=url_for,
+            get_flashed_messages=get_flashed_messages
+        )
+        self.jinja_env.filters['tojson'] = _tojson_filter
+</code></pre>
+
+<p>在调用<code>@app.route</code>装饰器时做了什么呢？其实就是往<code>url_map</code>里面添加了一条规则，包含了诸如endpoint，method等信息，最后会把endpoint通过<code>view_functions</code>绑定到具体函数（<code>hello</code>)。</p>
+
+<pre><code class="language-python">def route(self, rule, **options):
+    def decorator(f):
+        self.add_url_rule(rule, None, f, **options)
+        return f
+    return decorator
+
+def add_url_rule(self, rule, endpoint=None, view_func=None, **options):
+    if endpoint is None:
+        assert view_func is not None, 'expected view func if endpoint ' \
+        'is not provided.'
+    endpoint = view_func.__name__
+    options['endpoint'] = endpoint
+    options.setdefault('methods', ('GET',))
+    self.url_map.add(Rule(rule, **options))
+    if view_func is not None:
+        self.view_functions[endpoint] = view_func
+</code></pre>
+
+<p>接着看<code>run</code>方法的实现，它就是把<code>Flask</code>类实例当成了一个<code>wsgi</code>对象传给Werkzeug，再借由Werkzeug来运行web服务。</p>
+
+<pre><code class="language-python">def run(self, host='127.0.0.1', port=5000, **options):
+    from werkzeug import run_simple
+    if 'debug' in options:
+        self.debug = options.pop('debug')
+    options.setdefault('use_reloader', self.debug)
+    options.setdefault('use_debugger', self.debug)
+    return run_simple(host, port, self, **options)
+</code></pre>
+
+<p><code>Flask</code>类也体现了实现wsgi协议的地方，<code>wsgi_app</code>方法就是wsgi的application对象，在<code>__call__</code>方法中返回了这个方法的调用，因此我们在使用一些WSGI服务器（如wsgiref，gunicorn，uwsgi等）时，可以把app的实例传递给web server。</p>
+
+<pre><code class="language-python">def wsgi_app(self, environ, start_response):
+    with self.request_context(environ):
+        try:
+            rv = self.preprocess_request()
+            if rv is None:
+                rv = self.dispatch_request()
+            response = self.make_response(rv)
+            response = self.process_response(response)
+        except Exception, e:
+            response = self.make_response(self.handle_exception(e))
+        return response(environ, start_response)
+
+def __call__(self, environ, start_response):
+    &quot;&quot;&quot;Shortcut for :attr:`wsgi_app`.&quot;&quot;&quot;
+    return self.wsgi_app(environ, start_response)
+</code></pre>
+
+<p>通过之前可以看到，<code>Flask</code>类继承了一个Mixin类：<code>_PackageBoundObject</code>，<code>_PackageBoundObject</code>作为包装一个模块或包的<code>Mixin</code>，无论是app还是module，它都会继承这个<code>_PackageBoundObject</code>。在0.3这个版本虽然<code>BluePrint</code>还没出现，但已经有了多模块的概念，例如下面要提到的<code>Module</code>类，我们可以在一个app中定义<code>admin</code>和<code>main</code>两个模块，那么这里的<code>admin</code>和<code>main</code>都是被<code>_PackageBoundObject</code>包装过的对象，里面包含了模块的导入名称(<code>import_name</code>，在register的时候用）和根路径（<code>root_path</code>，定义了寻找这个模块的路径）。</p>
+
+<p><code>_ModuleSetupState</code>则是模块被装载时，用来包装模块信息的对象，与<code>Flask</code>类中的<code>register_module</code>具有强烈关联。</p>
+
+<pre><code class="language-python">class _PackageBoundObject(object):
+
+    def __init__(self, import_name):
+        #: the name of the package or module.  Do not change this once
+        #: it was set by the constructor.
+        self.import_name = import_name
+
+        #: where is the app root located?
+        self.root_path = _get_package_path(self.import_name)
+
+    def open_resource(self, resource):
+        if pkg_resources is None:
+            return open(os.path.join(self.root_path, resource), 'rb')
+        return pkg_resources.resource_stream(self.import_name, resource)
+ 
+
+class _ModuleSetupState(object):
+
+    def __init__(self, app, url_prefix=None):
+        self.app = app
+        self.url_prefix = url_prefix
+</code></pre>
+
+<p>Flask中的<code>Module</code>类同样继承了<code>_PackageBoundObject</code>，<code>Module</code>作为Flask模块化设计的一部分可以作为一个子模块被flask app注册进去，<code>Module</code>包含了一些基本信息：<code>name</code>(模块名称)，<code>url_prefix</code>（路由地址），<code>_register_events</code>（事件函数），<code>route</code>，<code>add_url_rule</code>这两个方法提供了添加视图函数路由的方式，使用过flask的都不会陌生，特别是<code>@app.route('/')</code>这种装饰方法，就是在这里来实现，最终都会调用<code>add_url_rule</code>这个方法，注意里面中<code>state.app.add_url_rule</code>的这条语句，这个state就是上面说的<code>_ModuleSetupState</code>，实际上，flask app在注册模块时会调用模块中<code>_register_events</code>中的所有事件，仔细看<code>Module</code>中的<code>add_url_rule</code>方法，它会把<code>register_rule</code>这个事件放在<code>_register_events</code>，想知道为什么这么做可直接看<code>Flask</code>类中<code>register_module</code>方法，其实app在<code>register_module</code>时，会生成一个state(<code>_ModuleSetupState</code>)，它包含了flask app自身的实例，然后遍历<code>_register_events</code>，把state作为参数，调用所有事件函数！因此我们再来看<code>Module</code>中的<code>add_url_rule</code>方法里面的<code>state.app.add_url_rule</code>，其实它的作用就是把路由注册到当前模块所在flask app的<code>url_map</code>中，可以看到它会在路由的前面加上模块自身的<code>name</code>。同理，下面的<code>before_request</code>，<code>before_app_request</code>，<code>after_request</code>，<code>after_app_request</code>等等的hook都是返回一个需要<strong>state</strong>作为参数的event function。也就是说，在分发的模块上做的工作最终都会在flask app中得到实现。</p>
+
+<pre><code class="language-python">class Module(_PackageBoundObject):
+
+    def __init__(self, import_name, name=None, url_prefix=None):
+        if name is None:
+            assert '.' in import_name, 'name required if package name ' \
+                'does not point to a submodule'
+            name = import_name.rsplit('.', 1)[1]
+        _PackageBoundObject.__init__(self, import_name)
+        self.name = name
+        self.url_prefix = url_prefix
+        self._register_events = []
+
+    def route(self, rule, **options):
+        def decorator(f):
+            self.add_url_rule(rule, f.__name__, f, **options)
+            return f
+        return decorator
+
+    def add_url_rule(self, rule, endpoint, view_func=None, **options):
+        def register_rule(state):
+            the_rule = rule
+            if state.url_prefix:
+                the_rule = state.url_prefix + rule
+            state.app.add_url_rule(the_rule, '%s.%s' % (self.name, endpoint),
+                                   view_func, **options)
+        self._record(register_rule)
+
+    def before_request(self, f):
+        self._record(lambda s: s.app.before_request_funcs
+            .setdefault(self.name, []).append(f))
+        return f
+
+    def before_app_request(self, f):
+        self._record(lambda s: s.app.before_request_funcs
+            .setdefault(None, []).append(f))
+        return f
+
+    def after_request(self, f):
+        self._record(lambda s: s.app.after_request_funcs
+            .setdefault(self.name, []).append(f))
+        return f
+
+    def after_app_request(self, f):
+        self._record(lambda s: s.app.after_request_funcs
+            .setdefault(None, []).append(f))
+        return f
+
+    def context_processor(self, f):
+        self._record(lambda s: s.app.template_context_processors
+            .setdefault(self.name, []).append(f))
+        return f
+
+    def app_context_processor(self, f):
+        self._record(lambda s: s.app.template_context_processors
+            .setdefault(None, []).append(f))
+        return f
+
+    def _record(self, func):
+        self._register_events.append(func)
+</code></pre>
+
+<p>关于Flask模块化的机制，现在应该清楚了，接着再来探讨Flask是怎么处理每个到来的请求的呢？</p>
+
+<p>Flask中定义了<code>Request</code>和<code>Response</code>类，分别对应请求和响应对象，它们继承了Werkzeug的<code>Request</code>和<code>Response</code>对象，它们已经帮你封装好了大部分东西（例如http头部的解析，environ，path_info，json，异常处理等）。</p>
+
+<p><code>_RequestGlobals</code>是关于某个请求中全局对象的一个集合，也就是flask中的g对象。</p>
+
+<pre><code class="language-python">class Request(RequestBase):
+
+    endpoint = view_args = routing_exception = None
+
+    @property
+    def module(self):
+        if self.endpoint and '.' in self.endpoint:
+            return self.endpoint.rsplit('.', 1)[0]
+
+    @cached_property
+    def json(self):
+        if __debug__:
+            _assert_have_json()
+        if self.mimetype == 'application/json':
+            return json.loads(self.data)
+
+
+class Response(ResponseBase):
+    default_mimetype = 'text/html'
+
+
+class _RequestGlobals(object):
+    pass
+</code></pre>
+
+<p>用过Flask的同学都知道，在视图函数想要获取当前请求的时候一般会通过<code>from flask import request</code>，然后在任何地方使用这个request对象，十分方便。</p>
+
+<p>那么这种获取请求的机制是如何实现的呢？看Flask源码我们可以看到它定义了几个全局对象：</p>
+
+<pre><code class="language-python"># context locals
+_request_ctx_stack = LocalStack()
+current_app = LocalProxy(lambda: _request_ctx_stack.top.app)
+request = LocalProxy(lambda: _request_ctx_stack.top.request)
+session = LocalProxy(lambda: _request_ctx_stack.top.session)
+g = LocalProxy(lambda: _request_ctx_stack.top.g)
+</code></pre>
+
+<p>它们都是Flask提供的ThreadLocal对象：</p>
+
+<ul>
+<li><code>_request_ctx_stack</code>：保存请求上下文对象的栈（下面的栈表示这个）。</li>
+<li><code>current_app</code>：栈顶请求（即当前请求）所在的应用（app）的代理对象。</li>
+<li><code>request</code>：栈顶请求的代理对象。</li>
+<li><code>session</code>：栈顶请求的会话的代理对象。</li>
+<li><code>g</code>：栈顶请求的全局对象的代理对象。</li>
+</ul>
+
+<p>可以看到<code>request</code>对象是一个请求上下文对象的代理，<code>_request_ctx_stack</code>其实一个维护<code>_RequestContext</code>的栈，那么它的作用是什么呢？其实，每当flask接受一个<code>request</code>之后，它就会把它和一些信息封装成一个<code>_RequestContext</code>的实例，然后把这个请求上下文塞到<code>_request_ctx_stack</code>栈中，当请求结束后，这个栈就会把<code>_RequestContext</code>弹出，很明显，这个<code>_request_ctx_stack</code>就是存储请求上下文的栈，除此之外，它还是一个<code>LocalStack</code>，即用本地线程（<code>ThreadLocal</code>）实现的栈，它保证了请求对象(<strong>全局对象</strong>)在多线程环境中是*线程隔离的*，在这里你也可以观察到flask与django中不同的地方，即django中写一个视图函数通常要带一个<code>request</code>参数，而flask则不用，原因就在这里。</p>
+
+<p>那么<code>_RequestContext</code>又是什么？<code>_RequestContext</code>是flask中一个非常重要的概念，它的语义即关于<strong>请求的上下文</strong>，它里面封装了关于请求的所有相关信息，例如：</p>
+
+<ul>
+<li><code>app</code>：请求所在的应用(<em>flask是多应用机制</em>)。</li>
+<li><code>url_adapter</code>：负责url mapping的适配器，关联的是Werkzeug的<code>Map</code>。</li>
+<li><code>request</code>：当前的请求对象。</li>
+<li><code>session</code>：当前<code>request</code>的会话对象。</li>
+<li><code>g</code>：即前面的_RequestGlobal，它存储了关于当前请求的全局对象，例如我们在做用户登录的时候通常会用到它来存储user对象。</li>
+<li><code>flashes</code>：关于当前请求的*闪现信息(flash message)*。</li>
+</ul>
+
+<pre><code class="language-python">class _RequestContext(object):
+
+    def __init__(self, app, environ):
+        self.app = app
+        self.url_adapter = app.url_map.bind_to_environ(environ)
+        self.request = app.request_class(environ)
+        self.session = app.open_session(self.request)
+        if self.session is None:
+            self.session = _NullSession()
+        self.g = _RequestGlobals()
+        self.flashes = None
+
+        try:
+            self.request.endpoint, self.request.view_args = \
+                self.url_adapter.match()
+        except HTTPException, e:
+            self.request.routing_exception = e
+
+    def push(self):
+        _request_ctx_stack.push(self)
+
+    def pop(self):
+        _request_ctx_stack.pop()
+
+    def __enter__(self):
+        self.push()
+        return self
+
+    def __exit__(self, exc_type, exc_value, tb):
+        if tb is None or not self.app.debug:
+            self.pop()
+</code></pre>
+
+<p>其他诸如<code>flash</code>，<code>url_for</code>，<code>Session</code>等有趣的功能也不单独说了，关于Flask的主要实现到这里基本就结束了。</p>
+
+                </section>
+            </article>
+
+            
+
+            
+
+            
+
+            <footer id="footer">
+    
+    <p class="small">
+    
+       © Copyright 2019 <i class="fa fa-heart" aria-hidden="true"></i> 
+    
+    </p>
+    <p class="small">
+        Powered by <a href="http://www.gohugo.io/">Hugo</a> Theme By <a href="https://github.com/nodejh/hugo-theme-cactus-plus">nodejh</a>
+    </p>
+</footer>
+
+        </section>
+
+        <script src="http://4fish.xyz/js/jquery-3.3.1.min.js"></script>
+<script src="http://4fish.xyz/js/main.js"></script>
+<script src="http://4fish.xyz/js/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+  
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-117516487-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+
+
+
+
+    </body>
+</html>

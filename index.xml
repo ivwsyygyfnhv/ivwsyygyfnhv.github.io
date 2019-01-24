@@ -227,5 +227,14 @@
       <description>本文将以个人（开发）的角度，讲述如何从零开始，编写、搭建和部署一个基于Python的Web应用程序。 从最简单的出发点来剖析，一个web应用后</description>
     </item>
     
+    <item>
+      <title>Flask源码阅读笔记</title>
+      <link>http://4fish.xyz/posts/flask-source/</link>
+      <pubDate>Tue, 01 Dec 2015 00:00:00 +0800</pubDate>
+      
+      <guid>http://4fish.xyz/posts/flask-source/</guid>
+      <description>首先看一个来自官方的使用例子： from flask import Flask app = Flask(__name__) @app.route(&amp;quot;/&amp;quot;) def hello(): return &amp;quot;Hello World!&amp;quot; if __name__ == &amp;quot;__main__&amp;quot;: app.run() 那么这里面发生了什么呢？进入源码一探究竟。 这是Flask的依赖的模块，可以</description>
+    </item>
+    
   </channel>
 </rss>
