@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Javascript on 4 Fish</title>
-    <link>http://4fish.xyz/tags/javascript/</link>
+    <link>https://4fish.xyz/tags/javascript/</link>
     <description>Recent content in Javascript on 4 Fish</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <lastBuildDate>Tue, 14 Mar 2017 00:00:00 +0800</lastBuildDate>
     
-	<atom:link href="http://4fish.xyz/tags/javascript/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://4fish.xyz/tags/javascript/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>JS中的闭包概念</title>
-      <link>http://4fish.xyz/posts/js-closure/</link>
+      <link>https://4fish.xyz/posts/js-closure/</link>
       <pubDate>Tue, 14 Mar 2017 00:00:00 +0800</pubDate>
       
-      <guid>http://4fish.xyz/posts/js-closure/</guid>
+      <guid>https://4fish.xyz/posts/js-closure/</guid>
       <description>像其他大多数动态编程语言一样，js也采用词法作用域，换而言之，函数的执行依赖于变量作用域，这个作用域是在函数定义时决定的，而不是函数调用时决</description>
     </item>
     

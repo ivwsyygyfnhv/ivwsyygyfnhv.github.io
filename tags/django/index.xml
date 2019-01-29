@@ -2,30 +2,30 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Django on 4 Fish</title>
-    <link>http://4fish.xyz/tags/django/</link>
+    <link>https://4fish.xyz/tags/django/</link>
     <description>Recent content in Django on 4 Fish</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <lastBuildDate>Wed, 28 Feb 2018 00:00:00 +0800</lastBuildDate>
     
-	<atom:link href="http://4fish.xyz/tags/django/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://4fish.xyz/tags/django/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>django中的session实现</title>
-      <link>http://4fish.xyz/posts/django-session/</link>
+      <link>https://4fish.xyz/posts/django-session/</link>
       <pubDate>Wed, 28 Feb 2018 00:00:00 +0800</pubDate>
       
-      <guid>http://4fish.xyz/posts/django-session/</guid>
+      <guid>https://4fish.xyz/posts/django-session/</guid>
       <description>Cookie 要理解session，首先要搞清cookie的概念。由于http是无状态的，服务器不能“记住”用户的信息状态，因此若同一个客户端发起的多条</description>
     </item>
     
     <item>
       <title>Django实践笔记</title>
-      <link>http://4fish.xyz/posts/django-note/</link>
+      <link>https://4fish.xyz/posts/django-note/</link>
       <pubDate>Tue, 28 Feb 2017 00:00:05 +0800</pubDate>
       
-      <guid>http://4fish.xyz/posts/django-note/</guid>
+      <guid>https://4fish.xyz/posts/django-note/</guid>
       <description>本文以Python的Web框架Django为例，整理下做从零开始到一个成型的网站所涉及到内容，目的不是教你如何一步一步搭建项目，而是让你对D</description>
     </item>
     

@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Http on 4 Fish</title>
-    <link>http://4fish.xyz/tags/http/</link>
+    <link>https://4fish.xyz/tags/http/</link>
     <description>Recent content in Http on 4 Fish</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <lastBuildDate>Wed, 22 Mar 2017 00:00:00 +0800</lastBuildDate>
     
-	<atom:link href="http://4fish.xyz/tags/http/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://4fish.xyz/tags/http/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>快速搭建一个Http2网站</title>
-      <link>http://4fish.xyz/posts/http2/</link>
+      <link>https://4fish.xyz/posts/http2/</link>
       <pubDate>Wed, 22 Mar 2017 00:00:00 +0800</pubDate>
       
-      <guid>http://4fish.xyz/posts/http2/</guid>
+      <guid>https://4fish.xyz/posts/http2/</guid>
       <description>本文讲述了如何快速简单地搭建一个http2的网站。 要使用http2，你需要做三件事： 搭建一个web server（nginx, apache, nodejs…</description>
     </item>
     

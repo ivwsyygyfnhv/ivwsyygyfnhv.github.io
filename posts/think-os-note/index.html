@@ -9,16 +9,16 @@
 		
 		<meta name="generator" content="Hugo 0.44" />
 		<title>操作系统笔记 &middot; 4 Fish</title>
-		<link rel="shortcut icon" href="http://4fish.xyz/images/favicon.ico">
-		<link rel="stylesheet" href="http://4fish.xyz/css/style.css">
-		<link rel="stylesheet" href="http://4fish.xyz/css/highlight.css">
+		<link rel="shortcut icon" href="https://4fish.xyz/images/favicon.ico">
+		<link rel="stylesheet" href="https://4fish.xyz/css/style.css">
+		<link rel="stylesheet" href="https://4fish.xyz/css/highlight.css">
 
 		
-		<link rel="stylesheet" href="http://4fish.xyz/css/monosocialiconsfont.css">
+		<link rel="stylesheet" href="https://4fish.xyz/css/monosocialiconsfont.css">
 		
 
 		
-		<link href="http://4fish.xyz/index.xml" rel="alternate" type="application/rss+xml" title="4 Fish" />
+		<link href="https://4fish.xyz/index.xml" rel="alternate" type="application/rss+xml" title="4 Fish" />
 		
 
 		
@@ -28,16 +28,16 @@
        <nav class="main-nav">
 	
 	
-		<a href='http://4fish.xyz/'> <span class="arrow">←</span>Home</a>
+		<a href='https://4fish.xyz/'> <span class="arrow">←</span>Home</a>
 	
-	<a href='http://4fish.xyz/posts'>Archive</a>
-	<a href='http://4fish.xyz/tags'>Tags</a>
-	<a href='http://4fish.xyz/about'>About</a>
+	<a href='https://4fish.xyz/posts'>Archive</a>
+	<a href='https://4fish.xyz/tags'>Tags</a>
+	<a href='https://4fish.xyz/about'>About</a>
 
 	
 
 	
-	<a class="cta" href="http://4fish.xyz/index.xml">Subscribe</a>
+	<a class="cta" href="https://4fish.xyz/index.xml">Subscribe</a>
 	
 </nav>
 
@@ -50,15 +50,15 @@
                     </h1>
                     <h2 class="headline">
                     May 8, 2018 22:18
-                    · 5545 words
+                    · 5544 words
                     · 12 minute read
                       <span class="tags">
                       
                       
                           
-                              <a href="http://4fish.xyz/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F">操作系统</a>
+                              <a href="https://4fish.xyz/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F">操作系统</a>
                           
-                              <a href="http://4fish.xyz/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0">读书笔记</a>
+                              <a href="https://4fish.xyz/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0">读书笔记</a>
                           
                       
                       
@@ -112,8 +112,7 @@
 
 <ul>
 <li>32位系统的虚拟地址：0~2^32-1，64位系统的虚拟地址：0~2^64-1</li>
-
-<li><p>进程的数据被组织为5个段（从低位到高位）</p>
+<li>进程的数据被组织为5个段（从低位到高位）
 
 <ul>
 <li>代码段</li>
@@ -121,33 +120,34 @@
 <li>globals段</li>
 <li>堆（从低位到高位增长）</li>
 <li>栈（从高位到低位增长）
-测试程序：
-<code>c
-#include &lt;stdio.h&gt;
-#include &lt;stdlib.h&gt;
-int global;
-int main () {
-	int local = 5;
-void *p = malloc(128);
-char *s = &quot;Hello, World&quot;;
-printf (&quot;Address of main is %p\n&quot;, main);
-printf (&quot;Address of global is %p\n&quot;, &amp;global);
-printf (&quot;Address of local is %p\n&quot;, &amp;local);
-printf (&quot;p points to %p\n&quot;, p);
-printf (&quot;s points to %p\n&quot;, s);
-}
-</code></li>
+测试程序：</li>
 </ul></li>
+</ul>
 
-<li><p>虚拟地址和物理地址之间的转换通过MMU来进行。</p>
+<pre><code class="language-c">  #include &lt;stdio.h&gt;
+  #include &lt;stdlib.h&gt;
+  int global;
+  int main () {
+  	int local = 5;
+    void *p = malloc(128);
+    char *s = &quot;Hello, World&quot;;
+    printf (&quot;Address of main is %p\n&quot;, main);
+    printf (&quot;Address of global is %p\n&quot;, &amp;global);
+    printf (&quot;Address of local is %p\n&quot;, &amp;local);
+    printf (&quot;p points to %p\n&quot;, p);
+    printf (&quot;s points to %p\n&quot;, s);
+  }
+</code></pre>
+
+<ul>
+<li>虚拟地址和物理地址之间的转换通过MMU来进行。
 
 <ul>
 <li>1.程序读取或写入一个变量时，CPU生成一个虚拟地址。</li>
 <li>2.MMU把虚拟地址分成两块，分别是页号（page number）和偏移量（offset），一个页对应内存中的一段，页的大小通常为1～4KB。</li>
 <li>3.MMU从TLB中查询页号，获取其对应的物理页号，通过物理页号和偏移量生成物理地址。</li>
 </ul></li>
-
-<li><p>假设操作系统是32位的，物理内存为1GB，分成1KB大小的页。</p>
+<li>假设操作系统是32位的，物理内存为1GB，分成1KB大小的页。
 
 <ul>
 <li>因为1GB为2^30字节，一页大小为2^10字节，因此有2^20个物理页，也叫做帧。</li>
@@ -156,8 +156,7 @@ printf (&quot;s points to %p\n&quot;, s);
 <li>如果VA为32位，偏移量位10位，剩余的22位指定了虚拟页号。</li>
 <li>因为有2^20个物理页，每个物理页号由20位组成，加上10位的偏移量，最终的PA为30位。</li>
 </ul></li>
-
-<li><p>解决页表占用内存大：多级页表</p></li>
+<li>解决页表占用内存大：多级页表</li>
 </ul>
 
 <h2 id="第四章-文件与文件系统">第四章：文件与文件系统</h2>
@@ -597,9 +596,9 @@ printf (&quot;s points to %p\n&quot;, s);
 
         </section>
 
-        <script src="http://4fish.xyz/js/jquery-3.3.1.min.js"></script>
-<script src="http://4fish.xyz/js/main.js"></script>
-<script src="http://4fish.xyz/js/highlight.min.js"></script>
+        <script src="https://4fish.xyz/js/jquery-3.3.1.min.js"></script>
+<script src="https://4fish.xyz/js/main.js"></script>
+<script src="https://4fish.xyz/js/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>
 
 

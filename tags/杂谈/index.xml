@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>杂谈 on 4 Fish</title>
-    <link>http://4fish.xyz/tags/%E6%9D%82%E8%B0%88/</link>
+    <link>https://4fish.xyz/tags/%E6%9D%82%E8%B0%88/</link>
     <description>Recent content in 杂谈 on 4 Fish</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <lastBuildDate>Sat, 14 Apr 2018 12:01:47 +0800</lastBuildDate>
     
-	<atom:link href="http://4fish.xyz/tags/%E6%9D%82%E8%B0%88/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://4fish.xyz/tags/%E6%9D%82%E8%B0%88/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>我为什么要写博客</title>
-      <link>http://4fish.xyz/posts/blog/</link>
+      <link>https://4fish.xyz/posts/blog/</link>
       <pubDate>Sat, 14 Apr 2018 12:01:47 +0800</pubDate>
       
-      <guid>http://4fish.xyz/posts/blog/</guid>
+      <guid>https://4fish.xyz/posts/blog/</guid>
       <description>发现有好一阵子没有更新文章了…今天思考了一个问题，就是我为什么要写博客？所以今天就分享下我为什么要写博客吧，说起来我最开始接触博客时还是在上</description>
     </item>
     
