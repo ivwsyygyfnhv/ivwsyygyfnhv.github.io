@@ -2,129 +2,129 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Python on 4 Fish</title>
-    <link>https://4fish.xyz/tags/python/</link>
+    <link>https://tonnie17.github.io/tags/python/</link>
     <description>Recent content in Python on 4 Fish</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <lastBuildDate>Wed, 27 Jun 2018 16:33:17 +0800</lastBuildDate>
     
-	<atom:link href="https://4fish.xyz/tags/python/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://tonnie17.github.io/tags/python/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Python Asyncio与多线程/多进程那些事</title>
-      <link>https://4fish.xyz/posts/asyncio-concurrency/</link>
+      <link>https://tonnie17.github.io/posts/asyncio-concurrency/</link>
       <pubDate>Wed, 27 Jun 2018 16:33:17 +0800</pubDate>
       
-      <guid>https://4fish.xyz/posts/asyncio-concurrency/</guid>
+      <guid>https://tonnie17.github.io/posts/asyncio-concurrency/</guid>
       <description>根据asyncio的文档介绍，asyncio的事件循环不是线程安全的，一个event loop只能在一个线程内调度和执行任务，并且同一时间只有</description>
     </item>
     
     <item>
       <title>python logging模块的死锁问题</title>
-      <link>https://4fish.xyz/posts/python-deadlock/</link>
+      <link>https://tonnie17.github.io/posts/python-deadlock/</link>
       <pubDate>Tue, 01 May 2018 22:15:31 +0800</pubDate>
       
-      <guid>https://4fish.xyz/posts/python-deadlock/</guid>
+      <guid>https://tonnie17.github.io/posts/python-deadlock/</guid>
       <description>某日，在排查线上问题时，在dump线程后发现了一些“诡异”的异常： File &amp;quot;/usr/local/lib/python3.5/logging/__init__.py&amp;quot;, line 1838, in info root.info(msg, *args, **kwargs) File &amp;quot;/usr/local/lib/python3.5/logging/__init__.py&amp;quot;, line 1271, in info Log &#39;msg % args&#39; with severity &#39;INFO&#39;. File &amp;quot;/usr/local/lib/python3.5/logging/__init__.py&amp;quot;, line 1279, in info self._log(INFO, msg, args, **kwargs) File &amp;quot;/usr/local/lib/python3.5/logging/__init__.py&amp;quot;, line 1415, in</description>
     </item>
     
     <item>
       <title>A Bite of Python</title>
-      <link>https://4fish.xyz/posts/a-bite-of-python/</link>
+      <link>https://tonnie17.github.io/posts/a-bite-of-python/</link>
       <pubDate>Fri, 16 Mar 2018 00:00:00 +0800</pubDate>
       
-      <guid>https://4fish.xyz/posts/a-bite-of-python/</guid>
+      <guid>https://tonnie17.github.io/posts/a-bite-of-python/</guid>
       <description>0. 前言 A Bite of Python，也可叫作“咬一口Python”，寓意着Python的冰山一角，包含着作者这几年学Python时积累的一些知识和经验</description>
     </item>
     
     <item>
       <title>django中的session实现</title>
-      <link>https://4fish.xyz/posts/django-session/</link>
+      <link>https://tonnie17.github.io/posts/django-session/</link>
       <pubDate>Wed, 28 Feb 2018 00:00:00 +0800</pubDate>
       
-      <guid>https://4fish.xyz/posts/django-session/</guid>
+      <guid>https://tonnie17.github.io/posts/django-session/</guid>
       <description>Cookie 要理解session，首先要搞清cookie的概念。由于http是无状态的，服务器不能“记住”用户的信息状态，因此若同一个客户端发起的多条</description>
     </item>
     
     <item>
       <title>Python服务器编程</title>
-      <link>https://4fish.xyz/posts/python-server/</link>
+      <link>https://tonnie17.github.io/posts/python-server/</link>
       <pubDate>Sat, 14 Oct 2017 00:00:00 +0800</pubDate>
       
-      <guid>https://4fish.xyz/posts/python-server/</guid>
+      <guid>https://tonnie17.github.io/posts/python-server/</guid>
       <description>IEEE公布的2017年编程语言排行榜，python高居首位。在百度指数上，python的搜索量也跻身到与java相等的量级，成为最火的语言</description>
     </item>
     
     <item>
       <title>Python Async/Await入门指南</title>
-      <link>https://4fish.xyz/posts/python-async-await/</link>
+      <link>https://tonnie17.github.io/posts/python-async-await/</link>
       <pubDate>Mon, 05 Jun 2017 00:00:00 +0800</pubDate>
       
-      <guid>https://4fish.xyz/posts/python-async-await/</guid>
+      <guid>https://tonnie17.github.io/posts/python-async-await/</guid>
       <description>本文将会讲述Python 3.5之后出现的async/await的使用方法，以及它们的一些使用目的，如果错误，欢迎指正。 昨天看到David Be</description>
     </item>
     
     <item>
       <title>用Docker部署一个Web应用</title>
-      <link>https://4fish.xyz/posts/docker-web/</link>
+      <link>https://tonnie17.github.io/posts/docker-web/</link>
       <pubDate>Tue, 18 Apr 2017 00:00:00 +0800</pubDate>
       
-      <guid>https://4fish.xyz/posts/docker-web/</guid>
+      <guid>https://tonnie17.github.io/posts/docker-web/</guid>
       <description>首先，什么是Docker?根据官网描述，我们可以得知，Docker是一个软件/容器平台，使用了虚拟化技术(cgroups，namespace</description>
     </item>
     
     <item>
       <title>Play Python</title>
-      <link>https://4fish.xyz/posts/play-python/</link>
+      <link>https://tonnie17.github.io/posts/play-python/</link>
       <pubDate>Thu, 09 Mar 2017 00:00:00 +0800</pubDate>
       
-      <guid>https://4fish.xyz/posts/play-python/</guid>
+      <guid>https://tonnie17.github.io/posts/play-python/</guid>
       <description>Hello World In [1]: import __hello__ Hello world! 查看API手册 ~ python 11/17 17:02:27 2016 Python 2.7.12 (default, Jun 29 2016, 14:05:02) [GCC 4.2.1 Compatible Apple LLVM 7.3.0 (clang-703.0.31)] on darwin Type &amp;quot;help&amp;quot;, &amp;quot;copyright&amp;quot;, &amp;quot;credits&amp;quot; or &amp;quot;license&amp;quot; for more information. &amp;gt;&amp;gt;&amp;gt; help() Welcome to Python 2.7! This is the online help utility. If this is your first time using Python, you should definitely check out</description>
     </item>
     
     <item>
       <title>Django实践笔记</title>
-      <link>https://4fish.xyz/posts/django-note/</link>
+      <link>https://tonnie17.github.io/posts/django-note/</link>
       <pubDate>Tue, 28 Feb 2017 00:00:05 +0800</pubDate>
       
-      <guid>https://4fish.xyz/posts/django-note/</guid>
+      <guid>https://tonnie17.github.io/posts/django-note/</guid>
       <description>本文以Python的Web框架Django为例，整理下做从零开始到一个成型的网站所涉及到内容，目的不是教你如何一步一步搭建项目，而是让你对D</description>
     </item>
     
     <item>
       <title>从0到1，Python网络编程的入门之路</title>
-      <link>https://4fish.xyz/posts/python-network/</link>
+      <link>https://tonnie17.github.io/posts/python-network/</link>
       <pubDate>Tue, 28 Feb 2017 00:00:02 +0800</pubDate>
       
-      <guid>https://4fish.xyz/posts/python-network/</guid>
+      <guid>https://tonnie17.github.io/posts/python-network/</guid>
       <description>最近在学习Python网络编程时看了一些相关的文章，发现大多数要么讲的晦涩难懂，要么讲的比较浅显，我就想为什么不在学习的过程中写一篇心得呢，</description>
     </item>
     
     <item>
       <title>从0到1，Python异步编程的演进之路</title>
-      <link>https://4fish.xyz/posts/python-async/</link>
+      <link>https://tonnie17.github.io/posts/python-async/</link>
       <pubDate>Tue, 28 Feb 2017 00:00:01 +0800</pubDate>
       
-      <guid>https://4fish.xyz/posts/python-async/</guid>
+      <guid>https://tonnie17.github.io/posts/python-async/</guid>
       <description>本文将通过一些例子来讲述作为Python开发者有哪些常用的方式来实现异步编程，以及分享个人对异步编程的理解，如有错误，欢迎指正。 先从一个例子</description>
     </item>
     
     <item>
       <title>从0到1，Python Web开发的进击之路</title>
-      <link>https://4fish.xyz/posts/python-web/</link>
+      <link>https://tonnie17.github.io/posts/python-web/</link>
       <pubDate>Tue, 28 Feb 2017 00:00:00 +0800</pubDate>
       
-      <guid>https://4fish.xyz/posts/python-web/</guid>
+      <guid>https://tonnie17.github.io/posts/python-web/</guid>
       <description>本文将以个人（开发）的角度，讲述如何从零开始，编写、搭建和部署一个基于Python的Web应用程序。 从最简单的出发点来剖析，一个web应用后</description>
     </item>
     
     <item>
       <title>Flask源码阅读笔记</title>
-      <link>https://4fish.xyz/posts/flask-source/</link>
+      <link>https://tonnie17.github.io/posts/flask-source/</link>
       <pubDate>Tue, 01 Dec 2015 00:00:00 +0800</pubDate>
       
-      <guid>https://4fish.xyz/posts/flask-source/</guid>
+      <guid>https://tonnie17.github.io/posts/flask-source/</guid>
       <description>首先看一个来自官方的使用例子： from flask import Flask app = Flask(__name__) @app.route(&amp;quot;/&amp;quot;) def hello(): return &amp;quot;Hello World!&amp;quot; if __name__ == &amp;quot;__main__&amp;quot;: app.run() 那么这里面发生了什么呢？进入源码一探究竟。 这是Flask的依赖的模块，可以</description>
     </item>
     
