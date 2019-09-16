@@ -89,17 +89,28 @@
 
 <h2 id="套接字选项">套接字选项</h2>
 
-<p><strong>SO_BROADCAST</strong>：允许广播
-<strong>SO_KEPPALIVE</strong>：周期性测试连接存活
-<strong>SO_LINGER</strong>：若有数据报发送则延迟关闭
-l_onoff=0：发送完发送缓冲区的数据并发送FIN。
-l_onoff=1，l_linger=0：那么当close某个连接时TCP将终止该连接，丢弃发送缓冲区和接收缓冲区的数据并发送一个RST到对端，避免了TIME_WAIT。
-l_onoff=1，l_linger!=0：发送完发送缓冲区的数据并发送FIN，丢弃接收缓冲区的数据，如果在CLOSED前延滞时间到，返回EWOULDBLOCK错误。
-<strong>SO_RCVBUF</strong>：接收缓冲区大小
-<strong>SO_SNDBUF</strong>：发送缓冲区大小
-<strong>SO_RCVLOWAT</strong>：接收缓冲区低水平标记
-<strong>SO_SNDLOWAT</strong>：发送缓冲区低水平标记
-<strong>SO_REUSEADDR</strong>：重用地址</p>
+<p><strong>SO_BROADCAST</strong>：允许广播</p>
+
+<p><strong>SO_KEPPALIVE</strong>：周期性测试连接存活</p>
+
+<p><strong>SO_LINGER</strong>：若有数据报发送则延迟关闭</p>
+
+<pre><code> l_onoff=0：发送完发送缓冲区的数据并发送FIN。
+
+ l_onoff=1，l_linger=0：那么当close某个连接时TCP将终止该连接，丢弃发送缓冲区和接收缓冲区的数据并发送一个RST到对端，避免了TIME_WAIT。
+
+ l_onoff=1，l_linger!=0：发送完发送缓冲区的数据并发送FIN，丢弃接收缓冲区的数据，如果在CLOSED前延滞时间到，返回EWOULDBLOCK错误。
+</code></pre>
+
+<p><strong>SO_RCVBUF</strong>：接收缓冲区大小</p>
+
+<p><strong>SO_SNDBUF</strong>：发送缓冲区大小</p>
+
+<p><strong>SO_RCVLOWAT</strong>：接收缓冲区低水平标记</p>
+
+<p><strong>SO_SNDLOWAT</strong>：发送缓冲区低水平标记</p>
+
+<p><strong>SO_REUSEADDR</strong>：重用地址</p>
 
 <ul>
 <li>允许启动一个监听服务器并捆绑其众所周知的端口，即使以前建立的将端口用作它们的本地端口仍存在。</li>

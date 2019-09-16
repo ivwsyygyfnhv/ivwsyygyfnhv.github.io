@@ -75,7 +75,7 @@
 
 <p>Python是一门解释型的高级编程语言，由Guido van Rossum于1989年开始编写，并在1991年发布了第一版。Python的特点是代码简洁而且可读性强，使用空格缩进来划分代码块。</p>
 
-<p><img src="https://s1.ax2x.com/2018/04/13/NlkSa.png" alt="" /></p>
+<p><img src="https://github.com/tonnie17/a_bite_of_python/raw/master/img/1.png" alt="" /></p>
 
 <h2 id="1-0-安装">1.0 安装</h2>
 
@@ -1000,7 +1000,7 @@ type_of_link = type(link)
 type_of_Link = type(Link)
 </code></pre>
 
-<p><img src="https://s1.ax2x.com/2018/04/13/Nxsqh.png" alt="" /></p>
+<p><img src="https://github.com/tonnie17/a_bite_of_python/raw/master/img/1.4.0.png" alt="" /></p>
 
 <p>在Python中万物皆对象，所有的类都继承自<code>object</code>类。</p>
 
@@ -1046,7 +1046,7 @@ cobj = C()
 mylist = [1,2,3] 
 </code></pre>
 
-<p><img src="https://s1.ax2x.com/2018/04/13/Nx4jH.png" alt="" /></p>
+<p><img src="https://github.com/tonnie17/a_bite_of_python/raw/master/img/1.4.png" alt="" /></p>
 
 <p>再来一个例子表明它们之间的关系：</p>
 
@@ -1142,7 +1142,7 @@ pprint(res.tolist())
 
 <p>下面是对上面列表翻译后的一个树状结构，可以看到原来的代码都被翻译成一颗工整的语法树结构了。</p>
 
-<p><img src="https://s1.ax2x.com/2018/04/13/NxJCN.png" alt="" /></p>
+<p><img src="https://github.com/tonnie17/a_bite_of_python/raw/master/img/1.5.1.png" alt="" /></p>
 
 <h3 id="1-6-2-指令栈">1.6.2 指令栈</h3>
 
@@ -1271,7 +1271,7 @@ outside() # G
 
 <p>假如下面的一个类结构，D继承了B和C，B和C分别继承了A。</p>
 
-<p><img src="https://s1.ax2x.com/2018/04/13/NxZ2u.png" alt="" /></p>
+<p><img src="https://github.com/tonnie17/a_bite_of_python/raw/master/img/1.7.1.png" alt="" /></p>
 
 <p>代码如下，其中A类和C类拥有方法<code>f</code>，分别打印A和C：</p>
 
@@ -1310,11 +1310,11 @@ D().f()
 
 <p>可以看到在旧式类中，方法的查找顺序为D-&gt;B-&gt;A-&gt;C：</p>
 
-<p><img src="https://s1.ax2x.com/2018/04/13/NxvV9.png" alt="" /></p>
+<p><img src="https://github.com/tonnie17/a_bite_of_python/raw/master/img/1.7.2.png" alt="" /></p>
 
 <p>而在新式类中，方法的查找顺序为D-&gt;B-&gt;C-&gt;A：</p>
 
-<p><img src="https://s1.ax2x.com/2018/04/13/NxyvA.png" alt="" /></p>
+<p><img src="https://github.com/tonnie17/a_bite_of_python/raw/master/img/1.7.3.png" alt="" /></p>
 
 <p>在Python 3.x出现后，就只保留新式类了，采用的MRO规则为C3算法。</p>
 
@@ -1677,7 +1677,7 @@ isinstance(A(), Sized) # use __subclasscheck__
 
 <p>下图是<code>list</code>与其它容器类之间的关系：</p>
 
-<p><img src="https://s1.ax2x.com/2018/04/13/NxPlO.png" alt="" /></p>
+<p><img src="https://github.com/tonnie17/a_bite_of_python/raw/master/img/2.0.1.png" alt="" /></p>
 
 <p>了解更多抽象容器类可查看<code>collections.abc</code>这个模块。</p>
 
@@ -1823,7 +1823,7 @@ def go():
 go()
 </code></pre>
 
-<p><img src="https://s1.ax2x.com/2018/04/13/NxcBq.png" alt="" /></p>
+<p><img src="https://github.com/tonnie17/a_bite_of_python/raw/master/img/3.1.1.png" alt="" /></p>
 
 <p>在下面这个例子中，<code>f</code>函数通过获取调用链中前一个栈帧的信息，拿到<code>add</code>函数栈帧中局部变量<code>a</code>与<code>b</code>的值，使得<code>f</code>函数在不接收参数的情况下完成了透明的加法：</p>
 
