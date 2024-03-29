@@ -1,0 +1,16 @@
+{
+  "newFileLocation": "folder",
+  "newFileFolderPath": "content/posts",
+  "userIgnoreFilters": [
+    "archetypes/",
+    "assets/",
+    "data/",
+    "i18n/",
+    "layouts/",
+    "public/",
+    "resources/",
+    "themes/",
+    "static/"
+  ],
+  "promptDelete": false
+}

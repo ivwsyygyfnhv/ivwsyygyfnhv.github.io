@@ -1,0 +1,10 @@
+baseURL = 'https://tonnie17.github.io/'
+languageCode = 'zh-cn'
+title = 'silverlining'
+hasCJKLanguage = true
+googleAnalytics = 'UA-117516487-1'
+theme = 'mini'
+defaultContentLanguage = 'zh'
+
+[params]
+  mainSections = ["posts"]
