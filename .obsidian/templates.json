@@ -1,4 +1,4 @@
 {
   "folder": "template",
-  "dateFormat": "YYYY-MM-DDTHH:mm:ss+08:00"
+  "dateFormat": "YYYY-MM-DDTHH:mm:ssZ"
 }
