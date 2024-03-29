@@ -1,10 +1,36 @@
 baseURL = 'https://tonnie17.github.io/'
 languageCode = 'zh-cn'
 title = 'silverlining'
+copyright = "© Copyright notice"
 hasCJKLanguage = true
 googleAnalytics = 'UA-117516487-1'
-theme = 'mini'
+theme = 'ezhil'
 defaultContentLanguage = 'zh'
+
+pygmentsstyle = "colorful"
+pygmentscodefences = true
+pygmentscodefencesguesssyntax = true
 
 [params]
   mainSections = ["posts"]
+
+[[menu.main]]
+name = "文章"
+url = "/posts"
+weight = 1
+
+[[menu.main]]
+name = "笔记"
+url = "/notes"
+weight = 2
+
+[[menu.main]]
+name = "关于"
+url = "/about"
+weight = 3
+
+[[menu.main]]
+name = "标签"
+url = "/tags"
+weight = 4
+
