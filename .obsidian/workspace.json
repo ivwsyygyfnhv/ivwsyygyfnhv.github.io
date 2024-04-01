@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "d4353ee82d0e6fad",
+        "id": "7a17cec93d2c930b",
         "type": "tabs",
         "children": [
           {
-            "id": "eb829f2557d3282c",
+            "id": "9e76e396c1a071ed",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -140,6 +140,10 @@
   },
   "active": "fc4a3e267ef79558",
   "lastOpenFiles": [
+    "archetypes/default.md",
+    "content/posts/2024-04-01.md",
+    "未命名.canvas",
+    "content/about.md",
     "public/css/normalize.css",
     "public/css/dark.css",
     "themes/ezhil/theme.toml",
@@ -150,7 +154,6 @@
     "themes/ezhil/static/css/dark.css",
     "themes/ezhil/static/js",
     "themes/ezhil/static/css",
-    "themes/ezhil/static",
     "themes/ezhil/images/tn.png",
     "themes/ezhil/images/screenshot.png",
     "themes/ezhil/images/screenshot-light.png",
@@ -183,9 +186,6 @@
     "themes/cocoa/exampleSite/content/about/_index.md",
     "themes/cocoa/exampleSite/README.md",
     "themes/cocoa/archetypes/default.md",
-    "themes/cocoa/README.md",
-    "template/Front-matter.md",
-    "content/posts/未命名.md",
-    "未命名.canvas"
+    "themes/cocoa/README.md"
   ]
 }
