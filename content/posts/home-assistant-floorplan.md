@@ -35,6 +35,7 @@ elements:
 - [Image](https://www.home-assistant.io/dashboards/picture-elements/#image-element)
 - [Conditional](https://www.home-assistant.io/dashboards/picture-elements/#conditional-element)
 - [Custom](https://www.home-assistant.io/dashboards/picture-elements/#custom-elements)
+
 这些类型拥有各自的配置格式，比如我们需要添加一个卧室里的灯泡实体，并且以一个灯泡图标的形式展示在房间位置的中间，打开的时候灯泡图标变量，关闭的时候灯泡图标变量，便可以尝试使用 state-icon 元素：
 ```yaml
 type: picture-elements
