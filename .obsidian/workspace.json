@@ -4,15 +4,19 @@
     "type": "split",
     "children": [
       {
-        "id": "7a17cec93d2c930b",
+        "id": "53d1a47c5d9be00b",
         "type": "tabs",
         "children": [
           {
-            "id": "9e76e396c1a071ed",
+            "id": "63c940ff039c6dee",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {}
+              "type": "markdown",
+              "state": {
+                "file": "content/posts/home-assistant-floorplan.md",
+                "mode": "source",
+                "source": false
+              }
             }
           }
         ]
@@ -81,6 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "content/posts/home-assistant-floorplan.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -97,6 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "content/posts/home-assistant-floorplan.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -118,7 +124,9 @@
             "type": "leaf",
             "state": {
               "type": "outline",
-              "state": {}
+              "state": {
+                "file": "content/posts/home-assistant-floorplan.md"
+              }
             }
           }
         ]
@@ -135,11 +143,16 @@
       "canvas:新建白板": false,
       "daily-notes:打开/创建今天的日记": false,
       "templates:插入模板": false,
-      "command-palette:打开命令面板": false
+      "command-palette:打开命令面板": false,
+      "templater-obsidian:Templater": false
     }
   },
-  "active": "fc4a3e267ef79558",
+  "active": "63c940ff039c6dee",
   "lastOpenFiles": [
+    "content/posts/docker-web.md",
+    "content/posts/home-assistant-floorplan.md",
+    "content/posts/docker-quickstart.md",
+    "template/Front-matter.md",
     "archetypes/default.md",
     "content/posts/2024-04-01.md",
     "未命名.canvas",
@@ -182,10 +195,6 @@
     "themes/cocoa/exampleSite/content/blog/metamorphosis-kafka.md",
     "themes/cocoa/exampleSite/content/blog/lesmiserables-hugo.md",
     "themes/cocoa/exampleSite/content/blog/_index.md",
-    "themes/cocoa/exampleSite/content/about/colophon.md",
-    "themes/cocoa/exampleSite/content/about/_index.md",
-    "themes/cocoa/exampleSite/README.md",
-    "themes/cocoa/archetypes/default.md",
-    "themes/cocoa/README.md"
+    "themes/cocoa/exampleSite/content/about/colophon.md"
   ]
 }
