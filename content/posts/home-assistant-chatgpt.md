@@ -50,7 +50,77 @@ Answer the user's questions about the world truthfully.
 If the user wants to control a device, reject the request and suggest using the Home Assistant app.
 ```
 
-打开 OpenAI Conversation 的调试日志，开启新的一轮对话：
+那么模型怎么将用户的意图转换成可执行的动作呢，在 OpenAI 的 API 中，tools 可以在对话中传递，让模型调用这些函数来执行特定的任务。下面是一个关于如何传递 tools 的简单示例。
+
+假设想让模型能够调用一个函数，该函数计算两个数的和。
+
+首先，需要定义这个函数。函数应该包含名称、描述、以及所需的参数类型：
+
+```python
+tools = [
+    {
+        "name": "calculate_sum",
+        "description": "Calculates the sum of two numbers.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "num1": {
+                    "type": "number",
+                    "description": "The first number."
+                },
+                "num2": {
+                    "type": "number",
+                    "description": "The second number."
+                }
+            },
+            "required": ["num1", "num2"]
+        }
+    }
+]
+```
+
+在这个例子中，`tools` 是一个列表，里面包含一个函数 `calculate_sum`，它需要两个参数：`num1` 和 `num2`，都为数值类型。
+
+然后将 tools 传递给 OpenAI API，并允许模型在对话过程中调用它们：
+
+```python
+import openai
+
+response = openai.ChatCompletion.create(
+  model="gpt-4",
+  messages=[
+    {"role": "user", "content": "帮我计算 5 和 10 的和"}
+  ],
+  functions=tools,  # 将定义的 tools 传递给模型
+  function_call="auto"  # 让模型自动决定何时调用函数
+)
+
+print(response.choices[0].message)
+```
+
+在 API 的响应中，模型可能会返回一个函数调用指令，而不是直接给出答案。可以解析模型的响应，并执行函数来获取结果：
+
+```python
+if response.choices[0].finish_reason == "function_call":
+    function_name = response.choices[0]["message"]["function_call"]["name"]
+    function_args = response.choices[0]["message"]["function_call"]["arguments"]
+
+    # 如果模型调用了 calculate_sum 函数，手动执行这个函数
+    if function_name == "calculate_sum":
+        num1 = float(function_args["num1"])
+        num2 = float(function_args["num2"])
+        result = num1 + num2
+
+        print(f"计算结果: {result}")
+```
+
+最终的输出会像这样：
+
+```
+计算结果: 15
+```
+
+为了更好地理解 Home Assistant 的这个过程，打开 OpenAI Conversation 的调试日志，开启新的一轮对话：
 
 ![截屏2024-09-08 19.53.02.png](https://image-1301539196.cos.ap-guangzhou.myqcloud.com/%E6%88%AA%E5%B1%8F2024-09-08%2019.53.02.png)
 
