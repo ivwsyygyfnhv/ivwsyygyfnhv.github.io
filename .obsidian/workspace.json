@@ -18,8 +18,21 @@
                 "source": false
               }
             }
+          },
+          {
+            "id": "dfb9adae289aa36b",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "content/posts/home-assistant-chatgpt.md",
+                "mode": "source",
+                "source": false
+              }
+            }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -85,7 +98,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "content/posts/home-assistant-floorplan.md",
+                "file": "content/posts/home-assistant-chatgpt.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +115,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "content/posts/home-assistant-floorplan.md",
+                "file": "content/posts/home-assistant-chatgpt.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +138,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "content/posts/home-assistant-floorplan.md"
+                "file": "content/posts/home-assistant-chatgpt.md"
               }
             }
           }
@@ -147,10 +160,18 @@
       "templater-obsidian:Templater": false
     }
   },
-  "active": "63c940ff039c6dee",
+  "active": "dfb9adae289aa36b",
   "lastOpenFiles": [
-    "content/posts/docker-web.md",
+    "public/tags/智能家居/index.xml",
+    "public/tags/智能家居/index.html",
+    "public/tags/智能家居",
+    "public/posts/home-assistant-chatgpt/index.html",
+    "public/posts/home-assistant-chatgpt",
+    "public/posts/home-assistant-floorplan/index.html",
+    "public/posts/home-assistant-floorplan",
     "content/posts/home-assistant-floorplan.md",
+    "content/posts/home-assistant-chatgpt.md",
+    "content/posts/docker-web.md",
     "content/posts/docker-quickstart.md",
     "template/Front-matter.md",
     "archetypes/default.md",
@@ -161,12 +182,6 @@
     "public/css/dark.css",
     "themes/ezhil/theme.toml",
     "themes/ezhil/static/js/main.js",
-    "themes/ezhil/static/js/feather.min.js",
-    "themes/ezhil/static/css/main.css",
-    "themes/ezhil/static/css/normalize.css",
-    "themes/ezhil/static/css/dark.css",
-    "themes/ezhil/static/js",
-    "themes/ezhil/static/css",
     "themes/ezhil/images/tn.png",
     "themes/ezhil/images/screenshot.png",
     "themes/ezhil/images/screenshot-light.png",
@@ -193,8 +208,6 @@
     "themes/cocoa/exampleSite/content/code/_index.md",
     "themes/cocoa/exampleSite/content/blog/use-at-instead-of-head.md",
     "themes/cocoa/exampleSite/content/blog/metamorphosis-kafka.md",
-    "themes/cocoa/exampleSite/content/blog/lesmiserables-hugo.md",
-    "themes/cocoa/exampleSite/content/blog/_index.md",
-    "themes/cocoa/exampleSite/content/about/colophon.md"
+    "themes/cocoa/exampleSite/content/blog/lesmiserables-hugo.md"
   ]
 }
