@@ -371,3 +371,90 @@ async def async_process(
     )
 ```
 
+到这里，配置对话助理的流程已经完成了，接下来还需要对聊天助手配置语音转文字（STT）以及文字转语音（TTS）的功能，这样聊天助手可以通过语音输入来接收用户的指令，以及将处理后的文本回复以语音的形式输出。
+对于 TTS，可以直接使用微软的在线服务，安装 hass-edge-tts 这个插件：https://github.com/hasscc/hass-edge-tts，安装完成后，在 Home Assistant 的语音助手的文字转语言选项中就可以看到「Edge TTS」的选项，语言设置为中文。
+
+而对于语音识别，有一些开源项目，Sherpa-ONNX 是其中一个支持较好的语音识别模型框架，它提供了中文的预训练模型，可以实现对 Home Assistant 语音输入进行离线识别。
+Sherpa-ONNX 的官网文档中提供了构建方式，这里在本地把它打包成一个 Docker 镜像，首先把 ASR 预训练模型下载到本地（https://github.com/k2-fsa/sherpa-onnx/releases/tag/asr-models），找到支持中文的模型，这里使用的是 `## sherpa-onnx-streaming-zipformer-multi-zh-hans-2023-12-12` ，把它下载到本地解压后，会得到一些文件，将它们统一放入到 models 目录，然后编写 Dockerfile，构建模型的启动镜像：
+
+```Dockerfile
+FROM ubuntu:20.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install -y \
+    cmake \
+    make \
+    g++ \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN git clone https://github.com/k2-fsa/sherpa-onnx \
+    && cd sherpa-onnx \
+    && mkdir build \
+    && cd build \
+    && cmake -DCMAKE_BUILD_TYPE=Release .. \
+    && make -j6
+
+RUN mkdir -p /server/bin \
+    && cp /sherpa-onnx/build/bin/* /server/bin \
+    && rm -rf /sherpa-onnx
+
+ADD init.sh /server
+
+ADD ./models /server/models
+
+WORKDIR /server
+
+EXPOSE 6006
+
+CMD ["/bin/bash", "/server/init.sh"]
+```
+
+这里做的主要工作是按照基础依赖，克隆 `k2-fsa/sherpa-onnx` 到本地，然后完成构建编译，将启动脚本和依赖放到主目录下，最后运行主目录中的启动脚本，运行 `sherpa-onnx-offline-websocket-server`，接收模型文件作为输入参数，启动一个 websocket 的非流式服务器，非流式是说需要在接收到整个音频数据之后，才开始处理和生成结果：
+
+```sh
+#!/bin/bash
+
+/server/bin/sherpa-onnx-offline-websocket-server \
+--port=6006 \
+--num-work-threads=5 \
+--tokens=/server/models/tokens.txt \
+--encoder=/server/models/encoder-epoch-20-avg-1-chunk-16-left-128.onnx \
+--decoder=/server/models/decoder-epoch-20-avg-1-chunk-16-left-128.onnx \
+--joiner=/server/models/joiner-epoch-20-avg-1-chunk-16-left-128.onnx \
+--max-batch-size=5
+```
+
+然后可以使用构建好的镜像创建和运行容器，查看输出，说明服务已经运行成功：
+
+```
+/sherpa-onnx/sherpa-onnx/csrc/parse-options.cc:Read:375 /server/bin/sherpa-onnx-offline-websocket-server --port=6006 --num-work-threads=5 --tokens=/server/models/tokens.txt --encoder=/server/models/encoder-epoch-20-avg-1-chunk-16-left-128.onnx --decoder=/server/models/decoder-epoch-20-avg-1-chunk-16-left-128.onnx --joiner=/server/models/joiner-epoch-20-avg-1-chunk-16-left-128.onnx --max-batch-size=5
+
+/sherpa-onnx/sherpa-onnx/csrc/offline-websocket-server.cc:main:91 Started!
+/sherpa-onnx/sherpa-onnx/csrc/offline-websocket-server.cc:main:92 Listening on: 6006
+/sherpa-onnx/sherpa-onnx/csrc/offline-websocket-server.cc:main:93 Number of work threads: 5
+```
+
+最后可以将 STT 和 home assistant 服务打包并且用 compose 进行编排：
+
+```yml
+services:
+  stt:
+    build: ./stt
+    ports:
+      - "6006:6006"
+
+  home_assistant:
+    image: "ghcr.io/home-assistant/home-assistant"
+    ports:
+      - "8123:8123"
+    environment:
+      - TZ=Asia/Shanghai
+      - OPENAI_BASE_URL=https://dashscope.aliyuncs.com/compatible-mode/v1
+    volumes:
+      - ./ha_config:/config
+```
+
+所有服务启动后，还需要在 Home Assistant 中安装集成，来调用 STT 的 websocket 服务来将语音输入到模型，并且获得文本输出，这里使用了 github 上的一个插件：https://github.com/bai1828/LocalSTT，把插件安装到 Home Assistant 的 `custom_components` 目录下，然后打开语音助手配置，设置语音转文字为「LocalSTT」，语言为中文，保存更新，完成最终的配置。
+![截屏2024-09-11 11.56.34.jpg](https://image-1301539196.cos.ap-guangzhou.myqcloud.com/%E6%88%AA%E5%B1%8F2024-09-11%2011.56.34.jpg)
